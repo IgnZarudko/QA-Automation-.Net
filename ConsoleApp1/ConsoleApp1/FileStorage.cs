@@ -33,7 +33,7 @@ namespace ConsoleApp1
          * @return result of file saving
          * @throws FileNameAlreadyExistsException in case of already existent filename
          */
-        public bool write(File file) 
+        public bool write(File file)
         {
             if (isExists(file.getFilename())) {
                 throw new FileNameAlreadyExistsException();
