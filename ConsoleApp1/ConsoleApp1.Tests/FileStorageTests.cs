@@ -83,8 +83,14 @@ namespace ConsoleApp1.Tests
                 fileStorage = new FileStorage();
                 fileStorage.write(new File("full-name.txt", "content"));
                 yield return new TestCaseData(fileStorage, "full-name.txt", true);
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("full-name.txt", "content"));
                 yield return new TestCaseData(fileStorage, "full-name", true);
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("full-name.txt", "content"));
                 yield return new TestCaseData(fileStorage, "name", true);
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("full-name.txt", "content"));
                 yield return new TestCaseData(fileStorage, "some-name.txt", false);
             }
         }
@@ -106,7 +112,13 @@ namespace ConsoleApp1.Tests
                 fileStorage.write(new File("file.txt", "content"));
                 fileStorage.write(new File("some-file.txt", "some content"));
                 yield return new TestCaseData(fileStorage, "file.txt", true);
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                fileStorage.write(new File("some-file.txt", "some content"));
                 yield return new TestCaseData(fileStorage, "some-file.txt", true);
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                fileStorage.write(new File("some-file.txt", "some content"));
                 yield return new TestCaseData(fileStorage, "fiel.ttx", false);
             }
         }
@@ -114,8 +126,83 @@ namespace ConsoleApp1.Tests
         [TestCaseSource(typeof(FileStorageTests), nameof(DeleteData))]
         public static void Delete_ReturnsCorrectResult(FileStorage fileStorage, string filename, bool expectedResult)
         {
-            Assert.AreEqual(expectedResult, fileStorage.delete(filename));
+            Assert.AreEqual(expectedResult, fileStorage.delete(filename), "There is error in deleting");
+        }
+
+        private static IEnumerable<TestCaseData> GetFilesData
+        {
+            get
+            {
+                FileStorage fileStorage = new FileStorage();
+                yield return new TestCaseData(fileStorage, new List<File>());
+                
+                fileStorage = new FileStorage();
+                List<File> filesList = new List<File>();
+                fileStorage.write(new File("file1.txt", "content"));
+                filesList.Add(new File("file1.txt", "content"));
+                yield return new TestCaseData(fileStorage, filesList);
+                
+                fileStorage = new FileStorage();
+                filesList = new List<File>();
+                fileStorage.write(new File("file2.txt", "content"));
+                filesList.Add(new File("file2.txt", "content"));
+                fileStorage.write(new File("FILE.txt", "somebody once told me"));
+                filesList.Add(new File("FILE.txt", "somebody once told me"));
+                yield return new TestCaseData(fileStorage, filesList);
+            }
+        }
+
+        [TestCaseSource(typeof(FileStorageTests), nameof(GetFilesData))]
+        public static void GetFiles_ListIsCorrect(FileStorage fileStorage, List<File> expectedFilesList)
+        {
+            Assert.AreEqual(expectedFilesList, fileStorage.getFiles(), "Lists are not equal");
+        }
+
+
+        private static IEnumerable<TestCaseData> GetFileData
+        {
+            get
+            {
+                FileStorage fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                yield return new TestCaseData(fileStorage, "file.txt", new File("file.txt", "content"));
+                
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                fileStorage.write(new File("one-more-file.txt", "one more content"));
+                yield return new TestCaseData(fileStorage, "one-more-file.txt", new File("one-more-file.txt", "one more content"));
+            }
+        }
+
+        [TestCaseSource(typeof(FileStorageTests), nameof(GetFileData))]
+        public static void GetFile_NameIsCorrect(FileStorage fileStorage, string nameToFind, File fileWasFound)
+        {
+            Assert.AreEqual(nameToFind, fileStorage.getFile(nameToFind).getFilename(), $"Something is wrong with searching \'{nameToFind}\' ");
         }
         
+        private static IEnumerable<TestCaseData> GetFileNullData
+        {
+            get
+            {
+                FileStorage fileStorage = new FileStorage();
+                yield return new TestCaseData(fileStorage, "storage-is-empty.txt");
+                
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                fileStorage.write(new File("one-more-file.txt", "one more content"));
+                yield return new TestCaseData(fileStorage, "i-dont-have-this-file.txt");
+                
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                fileStorage.write(new File("one-more-file.txt", "one more content"));
+                yield return new TestCaseData(fileStorage, "file");
+            }
+        }
+
+        [TestCaseSource(typeof(FileStorageTests), nameof(GetFileNullData))]
+        public static void GetFile_ReturnsNullIfNotFound(FileStorage fileStorage, string nameToFind)
+        {
+            Assert.IsNull(fileStorage.getFile(nameToFind), $"Something was found by this name: {nameToFind}");
+        }
     }
 }
