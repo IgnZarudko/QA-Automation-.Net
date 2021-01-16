@@ -155,7 +155,12 @@ namespace ConsoleApp1.Tests
         [TestCaseSource(typeof(FileStorageTests), nameof(GetFilesData))]
         public static void GetFiles_ListIsCorrect(FileStorage fileStorage, List<File> expectedFilesList)
         {
-            Assert.AreEqual(expectedFilesList, fileStorage.getFiles(), "Lists are not equal");
+            List<File> filesActual = fileStorage.getFiles();
+            for (int i = 0; i < expectedFilesList.Count; i++)
+            {
+                Assert.AreEqual(filesActual[i].getFilename(), expectedFilesList[i].getFilename());
+                Assert.AreEqual(filesActual[i].getSize(), expectedFilesList[i].getSize());
+            }
         }
 
 
