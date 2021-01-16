@@ -13,7 +13,7 @@ namespace ConsoleApp1.Tests
         public void Constructor_NameIsCorrect(string filename, string content)
         {
             File file = new File(filename, content);
-            Assert.AreEqual(filename, FileInfoFinder.GetFileName(file), $"wrong filename, expected \'{filename}\'");
+            Assert.AreEqual(filename, FileInfoFinder.GetFileName(file), $"Wrong filename, expected \'{filename}\'");
         }
 
         [TestCase("filename.extension", "some strange content, does not matter.")]
@@ -22,7 +22,7 @@ namespace ConsoleApp1.Tests
         public void Constructor_ContentIsCorrect(string filename, string content)
         {
             File file = new File(filename, content);
-            Assert.AreEqual(content, FileInfoFinder.GetFileContent(file), $"wrong content, expected \'{content}\'");
+            Assert.AreEqual(content, FileInfoFinder.GetFileContent(file), $"Wrong content, expected \'{content}\'");
         }
 
         [TestCase("filename.extension", "some strange content, does not matter.", 19.0)]
@@ -33,7 +33,7 @@ namespace ConsoleApp1.Tests
         public void Constructor_SizeIsCorrect(string filename, string content, double expectedSize)
         {
             File file = new File(filename, content);
-            Assert.AreEqual(expectedSize, FileInfoFinder.GetFileSize(file), $"wrong size, expected \'{expectedSize}\'");
+            Assert.AreEqual(expectedSize, FileInfoFinder.GetFileSize(file), $"Wrong size, expected {expectedSize}");
         }
 
         [TestCase("filename.extension", "some strange content, does not matter.", "extension")]
@@ -43,7 +43,7 @@ namespace ConsoleApp1.Tests
         public void Constructor_ExtensionIsCorrect(string filename, string content, string expectedExtension)
         {
             File file = new File(filename, content);
-            Assert.AreEqual(expectedExtension, FileInfoFinder.GetFileExtension(file), $"wrong extension, expected \'{expectedExtension}\'");
+            Assert.AreEqual(expectedExtension, FileInfoFinder.GetFileExtension(file), $"Wrong extension, expected \'{expectedExtension}\'");
         }
 
         [TestCase("filename.extension", "some strange content, does not matter.", 19.0)]
@@ -54,7 +54,7 @@ namespace ConsoleApp1.Tests
         public void GetSize_ReturnsCorrectSize(string filename, string content, double expectedSize)
         {
             File file = new File(filename, content);
-            Assert.AreEqual(expectedSize, file.getSize(), $"Getter returned wrong size, expected \'{expectedSize}\'");
+            Assert.AreEqual(expectedSize, file.getSize(), $"Getter returned wrong size, expected {expectedSize}");
         }
 
         [TestCase("filename.extension", "some strange content, does not matter.")]
