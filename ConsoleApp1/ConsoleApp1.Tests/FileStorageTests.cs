@@ -95,6 +95,27 @@ namespace ConsoleApp1.Tests
             Assert.AreEqual(expectedResult, fileStorage.isExists(filename), $"Got error searching {filename}");
         }
         
+        private static IEnumerable<TestCaseData> DeleteData
+        {
+            get
+            {
+                FileStorage fileStorage = new FileStorage();
+                yield return new TestCaseData(fileStorage, "file.txt", false);
+                
+                fileStorage = new FileStorage();
+                fileStorage.write(new File("file.txt", "content"));
+                fileStorage.write(new File("some-file.txt", "some content"));
+                yield return new TestCaseData(fileStorage, "file.txt", true);
+                yield return new TestCaseData(fileStorage, "some-file.txt", true);
+                yield return new TestCaseData(fileStorage, "fiel.ttx", false);
+            }
+        }
+        
+        [TestCaseSource(typeof(FileStorageTests), nameof(DeleteData))]
+        public static void Delete_ReturnsCorrectResult(FileStorage fileStorage, string filename, bool expectedResult)
+        {
+            Assert.AreEqual(expectedResult, fileStorage.delete(filename));
+        }
         
     }
 }
