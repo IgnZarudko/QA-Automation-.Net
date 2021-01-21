@@ -8,14 +8,15 @@ namespace HelloWebdriver.Tests.pages
 {
     public class LandingPage : CommonPage
     {
+        private static string FilterString = "скидки и акции, начать продавать на маркете, покупки, уцененные товары";
+        
         private static string AdBannerXPath = "//img[@class=\"_10KRGrktZR\"]";
         private readonly By _adBanner = By.XPath(AdBannerXPath);
         
         private static string LoginButtonXPath =
             "//a[@class=\"zsSJkfeAPw _2sWJL7-h2E eD98J84A1g _36y1jOUHs5 _1xlw1z4vqj\"]";
         private readonly By _loginButton = By.XPath(LoginButtonXPath);
-
-
+        
         private static string ProfilePopupButtonXPath = "//button[@class=\"_1YeOF5Jcfi _3rdp77Plde\"]";
         private readonly By _profilePopupButton = By.XPath(ProfilePopupButtonXPath);
         
@@ -28,7 +29,12 @@ namespace HelloWebdriver.Tests.pages
         private static string PopularCategoriesXPath = "//a[@class=\"_3Lwc_UVFq4\"]";
         private readonly By _popularCategories = By.XPath(PopularCategoriesXPath);
 
-        private static string FilterString = "Скидки, Начать продавать на Маркете";
+        private static string AllCategoriesPopupXPath = "//button[@class=\"zsSJkfeAPw _16jABpOZ2- gjdzW5ajbI _3WgR56k47x\"]";
+        private readonly By _allCategoriesPopup = By.XPath(AllCategoriesPopupXPath);
+
+        private static string CategoriesXPath = "//button[@class=\"_35SYuInI1T _2BRGNp7I5O\"]/a";
+        private readonly By _categories = By.XPath(CategoriesXPath);
+        
 
         public LandingPage(IWebDriver driver) : base(driver)
         {
@@ -68,24 +74,24 @@ namespace HelloWebdriver.Tests.pages
             return new User("", "", username, userEmail);
         }
 
-        public HashSet<String> PopularCategoriesNames()
+        public HashSet<String> PopularCategoriesUrls()
         {
             ReadOnlyCollection<IWebElement> webElements = Driver.FindElements(_popularCategories);
             
-            HashSet<string> popularCategoriesNames = new HashSet<string>();
+            HashSet<string> popularCategoriesUrls = new HashSet<string>();
             
             foreach (var element in webElements)
             {
-                if (!FilterString.Contains(element.Text) && element.Displayed)
+                if (!FilterString.Contains(element.Text.ToLower()) && element.Displayed)
                 {
-                    popularCategoriesNames.Add(element.Text);
+                    popularCategoriesUrls.Add(element.GetAttribute("href"));
                 }
             }
 
-            return popularCategoriesNames;
+            return popularCategoriesUrls;
         }
 
-        public CategoryPage GoToRandomPopularCategory(out string categoryName)
+        public CategoryPage GoToRandomPopularCategory(out string categoryUrl)
         {
             
             ReadOnlyCollection<IWebElement> webElements = Driver.FindElements(_popularCategories);
@@ -102,10 +108,31 @@ namespace HelloWebdriver.Tests.pages
             int amountOfCategories = popularCategoriesLinks.Count;
             int randomIndex = new Random(amountOfCategories).Next() % amountOfCategories;
             
-            categoryName = popularCategoriesLinks[randomIndex].Text;
+            categoryUrl = popularCategoriesLinks[randomIndex].GetAttribute("href");
             popularCategoriesLinks[randomIndex].Click();
             
             return new CategoryPage(Driver);
         }
+
+        public List<(string categoryName, string categoryUrl)> AllCategories()
+        {
+            WaitUntilDisplayed(_allCategoriesPopup);
+            Driver.FindElement(_allCategoriesPopup).Click();
+            
+            WaitUntilDisplayed(_categories);
+            
+            List<(string categoryName, string categoryUrl)> listOfCategories = new List<(string categoryName, string categoryUrl)>();
+
+            foreach (var element in Driver.FindElements(_categories))
+            {
+                if (!FilterString.Contains(element.Text.ToLower()))
+                {
+                    listOfCategories.Add((element.Text, element.GetAttribute("href")));
+                }
+            }
+
+            return listOfCategories;
+        }
+        
     }
 }

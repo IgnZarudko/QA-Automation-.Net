@@ -39,10 +39,12 @@ namespace HelloWebdriver.Tests.pages
             Driver.FindElement(_submitButton).Click();
         }
 
-        public void SubmitPassword()
+        public LandingPage SubmitPassword()
         {
             Driver.FindElement(_submitButton).Click();
             Driver.SwitchTo().Window(Driver.WindowHandles[0]);
+            
+            return new LandingPage(Driver);
         }
 
     }

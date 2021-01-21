@@ -14,6 +14,8 @@ namespace HelloWebdriver.Tests
         public string Username { get; set; }
         
         public string UserEmail { get; set; }
+        
+        public string CsvFilePath { get; set; }
 
     }
 }
