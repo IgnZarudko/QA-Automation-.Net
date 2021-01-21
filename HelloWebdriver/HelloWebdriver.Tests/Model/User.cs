@@ -17,7 +17,7 @@ namespace HelloWebdriver.Tests.Model
             UserEmail = userEmail;
         }
 
-        protected bool Equals(User other)
+        private bool Equals(User other)
         {
             return Username == other.Username && UserEmail == other.UserEmail;
         }

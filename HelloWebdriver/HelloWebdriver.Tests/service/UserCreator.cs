@@ -1,8 +1,9 @@
 ﻿using HelloWebdriver.Tests.Model;
+using HelloWebdriver.Tests.util;
 
 namespace HelloWebdriver.Tests.service
 {
-    public class UserCreator
+    public static class UserCreator
     {
         public static User WithCredentialsFromConfig(TestConfig config)
         {

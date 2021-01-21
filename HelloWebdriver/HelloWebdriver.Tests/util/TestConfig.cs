@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace HelloWebdriver.Tests
+﻿namespace HelloWebdriver.Tests.util
 {
     public class TestConfig
     {

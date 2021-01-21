@@ -7,12 +7,13 @@ using HelloWebdriver.Tests.Model;
 using HelloWebdriver.Tests.pages;
 using HelloWebdriver.Tests.service;
 using HelloWebdriver.Tests.singleton;
+using HelloWebdriver.Tests.util;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace HelloWebdriver.Tests
 {
-    public class YandexMarketTests
+    public static class YandexMarketTests
     {
         private static string _settingsPath = "../../../resources/settings.json";
         private static TestConfig _config;

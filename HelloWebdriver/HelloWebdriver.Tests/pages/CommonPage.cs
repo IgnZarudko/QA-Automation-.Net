@@ -9,13 +9,14 @@ namespace HelloWebdriver.Tests.pages
     {
         protected readonly IWebDriver Driver;
         protected readonly string PageUrl = "https://market.yandex.ru/";
-        public CommonPage(IWebDriver driver)
+
+        protected CommonPage(IWebDriver driver)
         {
             Driver = driver;
             PageFactory.InitElements(Driver, this);
         }
 
-        public CommonPage(IWebDriver driver, string pageUrl)
+        protected CommonPage(IWebDriver driver, string pageUrl)
         {
             PageUrl = pageUrl;
             Driver = driver;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace HelloWebdriver.Tests
+namespace HelloWebdriver.Tests.util
 {
-    public class CsvSerializer
+    public static class CsvSerializer
     {
         public static void WriteToFile(string path, List<(string name, string url)> categories)
         {
