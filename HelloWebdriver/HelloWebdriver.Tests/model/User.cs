@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HelloWebdriver.Tests.Model
+namespace HelloWebdriver.Tests.model
 {
     public class User
     {

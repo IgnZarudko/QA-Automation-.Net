@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Threading;
-using HelloWebdriver.Tests.Model;
+using HelloWebdriver.Tests.model;
 using HelloWebdriver.Tests.pages;
 using HelloWebdriver.Tests.service;
 using HelloWebdriver.Tests.singleton;

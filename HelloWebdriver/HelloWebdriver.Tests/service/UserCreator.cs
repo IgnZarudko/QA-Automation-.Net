@@ -1,4 +1,4 @@
-﻿using HelloWebdriver.Tests.Model;
+﻿using HelloWebdriver.Tests.model;
 using HelloWebdriver.Tests.util;
 
 namespace HelloWebdriver.Tests.service

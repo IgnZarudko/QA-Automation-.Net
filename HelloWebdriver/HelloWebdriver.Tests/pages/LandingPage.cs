@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using HelloWebdriver.Tests.Model;
+using HelloWebdriver.Tests.model;
 using OpenQA.Selenium;
 
 namespace HelloWebdriver.Tests.pages
