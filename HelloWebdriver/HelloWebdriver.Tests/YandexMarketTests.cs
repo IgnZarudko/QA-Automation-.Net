@@ -24,12 +24,6 @@ namespace HelloWebdriver.Tests
         [Test]
         public static void MarketTest()
         {
-            Assert.AreEqual(Config.Browser, "chrome", "somethings wrong i can feel it");
-            Assert.AreEqual(Config.StartUrl, "https://market.yandex.ru/", "somethings wrong i can feel it");
-            Assert.AreEqual(Config.UserLogin, "semen-testerov", "somethings wrong i can feel it");
-            Assert.AreEqual(Config.UserPassword, "2vEaCY.,87tZh%8", "somethings wrong i can feel it");
-            Assert.AreEqual(Config.Username, "Семён Тестеров", "somethings wrong i can feel it");
-            
             LandingPage landingPage = new LandingPage(WebDriver, Config.StartUrl);
             landingPage.Open();
             
