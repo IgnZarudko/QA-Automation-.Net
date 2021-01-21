@@ -21,5 +21,11 @@ namespace HelloWebdriver.Tests.pages
             Driver = driver;
             PageFactory.InitElements(Driver, this);
         }
+
+        protected void WaitUntilDisplayed(By element)
+        {
+            new WebDriverWait(Driver, TimeSpan.FromSeconds(10))
+                .Until(driver => driver.FindElement(element).Displayed);
+        }
     }
 }
