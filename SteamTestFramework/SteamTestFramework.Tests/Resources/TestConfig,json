@@ -1,0 +1,5 @@
+﻿{
+  "Browser" : "firefox",
+  "StartUrl" : "https://store.steampowered.com/",
+  "Language" : "ru"
+}
