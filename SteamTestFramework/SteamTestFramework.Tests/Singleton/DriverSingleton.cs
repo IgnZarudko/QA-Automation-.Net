@@ -1,23 +1,24 @@
 ﻿using OpenQA.Selenium;
-using SteamTestFramework.Tests.factory;
+using SteamTestFramework.Tests.Factory;
+using SteamTestFramework.Tests.Util;
 
-namespace SteamTestFramework.Tests.singleton
+namespace SteamTestFramework.Tests.Singleton
 {
     public class DriverSingleton
     {
         private static IWebDriver _webDriver;
 
-        public static IWebDriver GetWebDriver(string browser)
+        public static IWebDriver GetWebDriver(TestConfig config)
         {
             if (_webDriver == null)
             {
-                switch (browser)
+                switch (config.Browser)
                 {
                     case "firefox":
-                        _webDriver = new FirefoxDriverCreator().CreateDriver();
+                        _webDriver = new FirefoxDriverCreator().CreateDriver(config);
                         break;
                     default:
-                        _webDriver = new ChromeDriverCreator().CreateDriver();
+                        _webDriver = new ChromeDriverCreator().CreateDriver(config);
                         break;
                 }
                 _webDriver.Manage().Window.Maximize();
