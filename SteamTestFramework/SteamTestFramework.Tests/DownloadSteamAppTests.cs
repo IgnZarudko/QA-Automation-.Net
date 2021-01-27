@@ -1,50 +1,62 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using log4net;
+using log4net.Config;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SteamTestFramework.Tests.Page;
 using SteamTestFramework.Tests.Singleton;
 using SteamTestFramework.Tests.Util;
 
 namespace SteamTestFramework.Tests
 {
-    public class DownloadSteamAppTests
+    public class DownloadSteamAppTests : CommonSetup
     {
-        private static string _settingsPath = "../../../Resources/TestConfig.json";
-        private static TestConfig _config;
-        private static IWebDriver _webDriver;
+        private static string _testDataPath = "../../../Resources/DownloadTestData.json";
 
-        [SetUp]
-        public void Setup()
+        private static LandingPage _landingPage;
+        private static DownloadSteamAppPage _downloadSteamAppPage;
+
+        [SetUp] public void SetupAdditional()
         {
-            string jsonString = File.ReadAllText(Path.GetFullPath(_settingsPath));
-            _config = JsonSerializer.Deserialize<TestConfig>(jsonString);
-            _webDriver = DriverSingleton.GetWebDriver(_config); 
+            WebDriver.Navigate().GoToUrl(Config.StartUrl);
+            
+            _landingPage = new LandingPage(WebDriver);
+            _downloadSteamAppPage = new DownloadSteamAppPage(WebDriver);
         }
 
-        [Test]
-        public void DownloadSteamApp_Successful()
+        private static IEnumerable<TestCaseData> FileNameData()
         {
-            _webDriver.Navigate().GoToUrl(_config.StartUrl);
-            
-            LandingPage landingPage = new LandingPage(_webDriver);
-            landingPage.GoToDownloadSteamAppPage();
-            
-            DownloadSteamAppPage downloadSteamAppPage = new DownloadSteamAppPage(_webDriver);
-            downloadSteamAppPage.DownloadSteamAppInstaller();
-
-            Assert.IsTrue(File.Exists(Path.GetFullPath(_config.DownloadDirectory + "\\SteamSetup.exe")));
-            
-            File.Delete(Path.GetFullPath(_config.DownloadDirectory + "\\SteamSetup.exe"));
-            
-            Assert.IsFalse(File.Exists(Path.GetFullPath(_config.DownloadDirectory + "\\SteamSetup.exe")));
-
+            string jsonString = File.ReadAllText(Path.GetFullPath(_testDataPath));
+            DownloadTestData data = JsonSerializer.Deserialize<DownloadTestData>(jsonString);
+            yield return new TestCaseData(data.ExpectedFileName);
         }
 
-        [TearDown]
-        public void TearDown()
+        [TestCaseSource(typeof(DownloadSteamAppTests), nameof(FileNameData))]
+        public void DownloadSteamApp_Successful(string expectedFileName)
         {
-            DriverSingleton.CloseDriver();
+            Assert.IsTrue(_landingPage.IsDisplayed());
+            _landingPage.GoToDownloadSteamAppPage();
+            
+            Assert.IsTrue(_downloadSteamAppPage.IsDisplayed());
+            _downloadSteamAppPage.DownloadSteamAppInstaller();
+
+            if (Config.Browser == "chrome")
+                Thread.Sleep(2000); 
+            
+            //так как это не ожидание внутри страницы
+            //я себе позволил такую шалость, потому что зашёл в тупик
+            //памагити тупенькому((
+
+            Assert.IsTrue(File.Exists(Path.GetFullPath(Config.DownloadDirectory + "\\" + expectedFileName)), "File wasn't downloaded");
         }
     }
 }

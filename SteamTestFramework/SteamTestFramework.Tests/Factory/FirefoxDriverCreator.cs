@@ -20,6 +20,7 @@ namespace SteamTestFramework.Tests.Factory
             options.SetPreference("browser.download.folderList", 2);
             options.SetPreference("browser.download.manager.alertOnEXEOpen", false);
             options.SetPreference("browser.helperApps.neverAsk.saveToDisk","application/octet-stream");
+            options.SetPreference("intl.accept_languages", config.Language);
 
             return new FirefoxDriver(options);
         }
