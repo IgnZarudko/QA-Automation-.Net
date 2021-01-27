@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
-using log4net;
-using log4net.Config;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using SteamTestFramework.Tests.Page;
-using SteamTestFramework.Tests.Singleton;
 using SteamTestFramework.Tests.Util;
 
 namespace SteamTestFramework.Tests
@@ -25,7 +15,8 @@ namespace SteamTestFramework.Tests
         private static LandingPage _landingPage;
         private static DownloadSteamAppPage _downloadSteamAppPage;
 
-        [SetUp] public void SetupAdditional()
+        [SetUp] 
+        public void SetupAdditional()
         {
             WebDriver.Navigate().GoToUrl(Config.StartUrl);
             
@@ -57,6 +48,16 @@ namespace SteamTestFramework.Tests
             //памагити тупенькому((
 
             Assert.IsTrue(File.Exists(Path.GetFullPath(Config.DownloadDirectory + "\\" + expectedFileName)), "File wasn't downloaded");
+        }
+
+        [TearDown]
+        public void TearDownAdditional()
+        {
+            string[] files = Directory.GetFiles(Path.GetFullPath(Config.DownloadDirectory));
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
     }
 }

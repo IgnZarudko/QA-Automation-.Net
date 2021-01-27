@@ -13,7 +13,10 @@ namespace SteamTestFramework.Tests
     public class CommonSetup
     {
         private static string _settingsPath = "../../../Resources/TestConfig.json";
-        protected static TestConfig Config;
+        protected static readonly TestConfig Config = JsonSerializer
+            .Deserialize<TestConfig>(File
+                .ReadAllText(Path
+                    .GetFullPath(_settingsPath)));
         
         protected static IWebDriver WebDriver;
 
@@ -22,9 +25,6 @@ namespace SteamTestFramework.Tests
         {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-            
-            string jsonString = File.ReadAllText(Path.GetFullPath(_settingsPath));
-            Config = JsonSerializer.Deserialize<TestConfig>(jsonString);
 
             DriverSingleton.Config = Config;
             WebDriver = DriverSingleton.GetWebDriver(); 

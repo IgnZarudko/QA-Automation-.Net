@@ -1,36 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading;
 using log4net;
-using log4net.Config;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SteamTestFramework.Tests.Page;
-using SteamTestFramework.Tests.Singleton;
 using SteamTestFramework.Tests.Util;
 
 namespace SteamTestFramework.Tests
 {
     public class DiscountCalculationTest : CommonSetup
     {
-        private static string _dataPath = "../../../Resources/DiscountCalculationTestData.json";
+        private static string _dataPath = "../../../Resources/Locale/DiscountCalculationTestData.json";
         
         private static LandingPage _landingPage;
 
         [SetUp]
         public void SetupAdditional()
         {
-           WebDriver.Navigate().GoToUrl(Config.StartUrl);
+            WebDriver.Navigate().GoToUrl(Config.StartUrl);
             
             _landingPage = new LandingPage(WebDriver);
         }
 
         private static IEnumerable<TestCaseData> DiscountCalculationData()
         {
+            _dataPath = _dataPath.Replace("Locale", $"Locale-{Config.Language}");
             string jsonString = File.ReadAllText(Path.GetFullPath(_dataPath));
             JArray jArray = JArray.Parse(jsonString);
 
@@ -38,7 +34,7 @@ namespace SteamTestFramework.Tests
             {
                 DiscountCalculationTestData data =
                     JsonSerializer.Deserialize<DiscountCalculationTestData>(jObject.ToString());
-                yield return new TestCaseData(Config.Language == "en" ? data.GenreEn : data.GenreRu, data.DiscountType);
+                yield return new TestCaseData(data.Genre, data.DiscountType);
             }
         }
         

@@ -1,6 +1,6 @@
 ﻿{
   "Browser" : "chrome",
   "StartUrl" : "https://store.steampowered.com/",
-  "Language" : "en",
+  "Language" : "ru",
   "DownloadDirectory" : "..\\..\\..\\Downloads"
 }
