@@ -18,8 +18,6 @@ namespace SteamTestFramework.Tests.Factory
             string downloadPath = Path.GetFullPath(config.DownloadDirectory);
             options.AddUserProfilePreference("download.default_directory", downloadPath);
             options.AddUserProfilePreference("profile.default_content_setting_values.automatic_downloads", 1);
-            // options.AddUserProfilePreference("download.prompt_for_download", false);
-            // options.AddUserProfilePreference("download.directory_upgrade", true);
             options.AddUserProfilePreference("safebrowsing.enabled", true);
             
             options.AddArgument("--lang=" + config.Language);
