@@ -24,7 +24,7 @@ namespace SteamTestFramework.Tests.Singleton
                         break;
                 }
                 _webDriver.Manage().Window.Maximize();
-                _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+                _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
                 return _webDriver;
             }
             return _webDriver;

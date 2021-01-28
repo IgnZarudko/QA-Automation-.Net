@@ -5,6 +5,7 @@ using System.Threading;
 using log4net;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using SteamTestFramework.Tests.Model;
 using SteamTestFramework.Tests.Page;
 using SteamTestFramework.Tests.Util;
 
@@ -12,9 +13,10 @@ namespace SteamTestFramework.Tests
 {
     public class DiscountCalculationTest : CommonSetup
     {
-        private static string _dataPath = "../../../Resources/Locale/DiscountCalculationTestData.json";
+        private static readonly string DataPath = $"../../../Resources/Locale-{Config.Language}/DiscountCalculationTestData.json";
         
         private static LandingPage _landingPage;
+        private static BrowsingPage _browsingPage;
 
         [SetUp]
         public void SetupAdditional()
@@ -22,24 +24,36 @@ namespace SteamTestFramework.Tests
             WebDriver.Navigate().GoToUrl(Config.StartUrl);
             
             _landingPage = new LandingPage(WebDriver);
+            _browsingPage = new BrowsingPage(WebDriver);
         }
 
         private static IEnumerable<TestCaseData> DiscountCalculationData()
         {
-            _dataPath = _dataPath.Replace("Locale", $"Locale-{Config.Language}");
-            string jsonString = File.ReadAllText(Path.GetFullPath(_dataPath));
+            string jsonString = File.ReadAllText(Path.GetFullPath(DataPath));
             JArray jArray = JArray.Parse(jsonString);
 
             foreach (var jObject in jArray)
             {
                 DiscountCalculationTestData data =
                     JsonSerializer.Deserialize<DiscountCalculationTestData>(jObject.ToString());
-                yield return new TestCaseData(data.Genre, data.DiscountType);
+
+                CalculationType type;
+                switch (data.DiscountType)
+                {
+                    case "Highest":
+                        type = CalculationType.Highest;
+                        break;
+                    default:
+                        type = CalculationType.Lowest;
+                        break;
+                }
+                
+                yield return new TestCaseData(data.Genre, type);
             }
         }
         
         [TestCaseSource(typeof(DiscountCalculationTest), nameof(DiscountCalculationData))]
-        public void DiscountCalculation_IsCorrect(string genre, string discountType)
+        public void DiscountCalculation_IsCorrect(string genre, CalculationType discountType)
         {
             LogManager.GetLogger("loggerInTest").Info($"got Genre {genre}");
             LogManager.GetLogger("loggerInTest").Info($"got DiscountType {discountType}");
@@ -48,6 +62,15 @@ namespace SteamTestFramework.Tests
             
             _landingPage.StoreMenu.GetMenuElement(genre).Click();
             
+            Assert.IsTrue(_browsingPage.PageHeaderText().Contains(genre));
+            
+            _browsingPage.GoToTopSellers();
+
+            Assert.IsTrue(_browsingPage.TopSellersIsActive());
+            
+            Game game;
+            _browsingPage.GoToGameWithSpecifiedDiscount(discountType, out game);
+
             Thread.Sleep(1000);
         }
         
