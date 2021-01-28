@@ -33,7 +33,7 @@ namespace SteamTestFramework.Tests
         [TearDown]
         public void TearDown()
         {
-            // DriverSingleton.CloseDriver();
+            DriverSingleton.CloseDriver();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace SteamTestFramework.Tests
         
         private static LandingPage _landingPage;
         private static BrowsingPage _browsingPage;
+        private static GamePage _gamePage;
 
         [SetUp]
         public void SetupAdditional()
@@ -25,6 +26,7 @@ namespace SteamTestFramework.Tests
             
             _landingPage = new LandingPage(WebDriver);
             _browsingPage = new BrowsingPage(WebDriver);
+            _gamePage = new GamePage(WebDriver);
         }
 
         private static IEnumerable<TestCaseData> DiscountCalculationData()
@@ -71,7 +73,9 @@ namespace SteamTestFramework.Tests
             Game game;
             _browsingPage.GoToGameWithSpecifiedDiscount(discountType, out game);
 
-            Thread.Sleep(1000);
+            Game gameActual = _gamePage.GameInfo();
+            Assert.AreEqual(game, gameActual, $"games are not equal, expected {game.Name},{game.DiscountAmount},{game.OriginalPrice},{game.NewPrice}\n" +
+                                              $"but have {gameActual.Name},{gameActual.DiscountAmount},{gameActual.OriginalPrice},{gameActual.NewPrice}");
         }
         
     }
