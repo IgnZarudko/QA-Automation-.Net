@@ -1,4 +1,4 @@
-﻿namespace SteamTestFramework.Tests.Util
+﻿namespace SteamTestFramework.Tests.Util.TestData
 {
     public class DownloadTestData
     {

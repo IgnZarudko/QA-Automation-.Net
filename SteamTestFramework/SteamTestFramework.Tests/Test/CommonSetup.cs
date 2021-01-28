@@ -6,9 +6,9 @@ using log4net.Config;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using SteamTestFramework.Tests.Singleton;
-using SteamTestFramework.Tests.Util;
+using SteamTestFramework.Tests.Util.Config;
 
-namespace SteamTestFramework.Tests
+namespace SteamTestFramework.Tests.Test
 {
     public class CommonSetup
     {

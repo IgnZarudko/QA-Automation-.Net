@@ -1,4 +1,4 @@
-﻿namespace SteamTestFramework.Tests.Util
+﻿namespace SteamTestFramework.Tests.Util.Config
 {
     public class TestConfig
     {
@@ -6,5 +6,7 @@
         public string StartUrl { get; set; }
         public string Language { get; set; }
         public string DownloadDirectory { get; set; }
+        
+        public int TimeForTimeoutSeconds { get; set; }
     }
 }

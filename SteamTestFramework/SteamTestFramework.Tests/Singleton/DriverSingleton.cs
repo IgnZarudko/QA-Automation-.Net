@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using SteamTestFramework.Tests.Factory;
-using SteamTestFramework.Tests.Util;
+using SteamTestFramework.Tests.Util.Config;
 
 namespace SteamTestFramework.Tests.Singleton
 {
@@ -24,7 +24,7 @@ namespace SteamTestFramework.Tests.Singleton
                         break;
                 }
                 _webDriver.Manage().Window.Maximize();
-                _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+                _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Config.TimeForTimeoutSeconds);
                 return _webDriver;
             }
             return _webDriver;

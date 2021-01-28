@@ -2,7 +2,7 @@
 using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using SteamTestFramework.Tests.Util;
+using SteamTestFramework.Tests.Util.Config;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
 

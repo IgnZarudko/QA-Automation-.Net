@@ -2,5 +2,6 @@
   "Browser" : "chrome",
   "StartUrl" : "https://store.steampowered.com/",
   "Language" : "en",
-  "DownloadDirectory" : "..\\..\\..\\Downloads"
+  "DownloadDirectory" : "..\\..\\..\\Downloads",
+  "TimeForTimeoutSeconds" : 2
 }

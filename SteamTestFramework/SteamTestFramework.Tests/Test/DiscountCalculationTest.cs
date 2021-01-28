@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Threading;
 using log4net;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SteamTestFramework.Tests.Model;
 using SteamTestFramework.Tests.Page;
-using SteamTestFramework.Tests.Util;
+using SteamTestFramework.Tests.Util.Enum;
+using SteamTestFramework.Tests.Util.TestData;
 
-namespace SteamTestFramework.Tests
+namespace SteamTestFramework.Tests.Test
 {
     public class DiscountCalculationTest : CommonSetup
     {

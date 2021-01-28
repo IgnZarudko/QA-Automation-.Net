@@ -3,7 +3,7 @@ using log4net;
 using OpenQA.Selenium;
 using SteamTestFramework.Tests.Model;
 using SteamTestFramework.Tests.Page.Element;
-using SteamTestFramework.Tests.Util;
+using SteamTestFramework.Tests.Util.Enum;
 
 namespace SteamTestFramework.Tests.Page
 {

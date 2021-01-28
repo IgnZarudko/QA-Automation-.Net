@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Threading;
 using NUnit.Framework;
 using SteamTestFramework.Tests.Page;
-using SteamTestFramework.Tests.Util;
+using SteamTestFramework.Tests.Util.TestData;
+using SteamTestFramework.Tests.Util.Wait;
 
-namespace SteamTestFramework.Tests
+namespace SteamTestFramework.Tests.Test
 {
     public class DownloadSteamAppTests : CommonSetup
     {
@@ -39,13 +39,8 @@ namespace SteamTestFramework.Tests
             
             Assert.IsTrue(_downloadSteamAppPage.IsDisplayed());
             _downloadSteamAppPage.DownloadSteamAppInstaller();
-
-            if (Config.Browser == "chrome")
-                Thread.Sleep(2000); 
-            
-            //так как это не ожидание внутри страницы
-            //я себе позволил такую шалость, потому что зашёл в тупик
-            //памагити тупенькому((
+             
+            FileWaiter.WaitUntilFileDownloads(Config);
 
             Assert.IsTrue(File.Exists(Path.GetFullPath(Config.DownloadDirectory + "\\" + expectedFileName)), "File wasn't downloaded");
         }
@@ -53,10 +48,10 @@ namespace SteamTestFramework.Tests
         [TearDown]
         public void TearDownAdditional()
         {
-            string[] files = Directory.GetFiles(Path.GetFullPath(Config.DownloadDirectory));
+            FileInfo[] files = new DirectoryInfo(Path.GetFullPath(Config.DownloadDirectory)).GetFiles();
             foreach (var file in files)
             {
-                File.Delete(file);
+                file.Delete();
             }
         }
     }
