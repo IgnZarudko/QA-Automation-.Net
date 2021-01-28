@@ -44,6 +44,7 @@ namespace SteamTestFramework.Tests.Page
 
         public bool TopSellersIsActive()
         {
+            _log.Info("Checking that Top Sellers tab is active");
             return _driver.FindElement(_topSellersTab).GetAttribute("class").Contains("active");
         }
 
@@ -62,7 +63,6 @@ namespace SteamTestFramework.Tests.Page
                 
                 if (item.Model != null)
                 {
-                    _log.Info($"item with name {item.Model.Name} has discount of {item.Model.DiscountAmount}");
                     gameItems.Add(item);
                 }
             }
@@ -96,7 +96,7 @@ namespace SteamTestFramework.Tests.Page
             }
             Game model = itemWithBorderDiscount.Model;
             
-            _log.Info("Game found, navigating to its page");
+            _log.Info($"Game found ({model.Name}), navigating to its page");
             itemWithBorderDiscount.GoToGamePage();
 
             return model;

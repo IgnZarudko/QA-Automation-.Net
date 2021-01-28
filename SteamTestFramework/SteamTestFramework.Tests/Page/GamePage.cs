@@ -37,6 +37,7 @@ namespace SteamTestFramework.Tests.Page
         
         public Game GameInfo()
         {
+            _log.Info("Creating game model from this page");
             IWebElement addToCartSection = _driver.FindElement(_addToCartSection);
 
             string name = _driver.FindElement(_gameNameHeader).Text;

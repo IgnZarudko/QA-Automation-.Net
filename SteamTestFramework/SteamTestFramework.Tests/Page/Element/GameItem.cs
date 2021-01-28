@@ -34,7 +34,7 @@ namespace SteamTestFramework.Tests.Page.Element
         
         private readonly ILog _log = LogManager.GetLogger(typeof(LandingPage));
         
-        private IWebElement _parentElement;
+        private readonly IWebElement _parentElement;
         
         private static string NameXPath = ".//div[@class='tab_item_name']";
         private readonly By _name = By.XPath(NameXPath);
@@ -55,6 +55,7 @@ namespace SteamTestFramework.Tests.Page.Element
 
         public void GoToGamePage()
         {
+            _log.Info("Going to game page");
             _parentElement.Click();
         }
     }
