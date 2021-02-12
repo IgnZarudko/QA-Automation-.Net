@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Aquality.Selenium.Browsers;
-using Aquality.Selenium.Elements.Interfaces;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using UserInyerface.Tests.Page;
 
@@ -14,6 +15,9 @@ namespace UserInyerface.Tests
         
         private WelcomePage _welcomePage;
         private CreateProfilePage _createProfilePage;
+        
+        private static string _russianAlphabet = "АаБбВвГгДдЕеЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя";
+        private static string _englishAlphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsRrSsTtUuVvWwXxYyZz";
         
         [SetUp]
         public void Setup()
@@ -29,7 +33,16 @@ namespace UserInyerface.Tests
 
         private static IEnumerable<TestCaseData> PasswordAndEmail()
         {
-            yield return new TestCaseData("pssЦoRd228zzz", "validmail", "domain");
+            Randomizer rand = new Randomizer();
+            
+            string email = rand.GetString(7, _englishAlphabet);
+            string domain = rand.GetString(5, _englishAlphabet);
+            string password = rand.GetString(9, _englishAlphabet);
+            password += rand.GetString(2, _russianAlphabet);
+            password += rand.Next() % 10;
+            password += email.Last();
+            
+            yield return new TestCaseData(password, email, domain);
         }
 
         [TestCaseSource(typeof(UserInyerfaceTests), nameof(PasswordAndEmail))]
@@ -40,7 +53,18 @@ namespace UserInyerface.Tests
             _welcomePage.ToFormButton.Click(); 
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
-
+            
+            _createProfilePage.LoginDataForm.PasswordBox.ClearAndType(password);
+            _createProfilePage.LoginDataForm.EmailNameBox.ClearAndType(email);
+            _createProfilePage.LoginDataForm.EmailDomainBox.ClearAndType(domain);
+            _createProfilePage.LoginDataForm.EmailAfterDotDropdownButton.Click();
+            _createProfilePage.LoginDataForm.EmailAfterDotItems[3].Click();
+            _createProfilePage.LoginDataForm.AcceptTermsCheckBox.Click();
+            _createProfilePage.LoginDataForm.ConfirmLoginDataButton.Click();
+            
+            //a["class='avatar-and-interests__upload-button'"]
+            
+            
         }
         
         [Test]
