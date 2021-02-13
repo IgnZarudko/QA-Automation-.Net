@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Aquality.Selenium.Browsers;
@@ -12,12 +14,16 @@ namespace UserInyerface.Tests
     public class UserInyerfaceTests
     {
         private Browser _browser;
+        private Randomizer _randomizer;
         
         private WelcomePage _welcomePage;
         private CreateProfilePage _createProfilePage;
         
         private static string _russianAlphabet = "АаБбВвГгДдЕеЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя";
         private static string _englishAlphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsRrSsTtUuVvWwXxYyZz";
+
+        private static string _uploaderExecutablePath = "..\\..\\..\\Utils\\Uploader.exe";
+        private static string _fileToUploadPath = "..\\..\\..\\Resources\\cheems.png";
         
         [SetUp]
         public void Setup()
@@ -26,6 +32,8 @@ namespace UserInyerface.Tests
             _browser.Maximize();
             _browser.GoTo("https://userinyerface.com/game.html%20target=");
             _browser.WaitForPageToLoad();
+            
+            _randomizer = new Randomizer(12);
             
             _welcomePage = new WelcomePage(By.XPath("//div[@class='start view view--center']"), "Welcome page");
             _createProfilePage = new CreateProfilePage(By.XPath("//div[@class='game view']"), "Create profile page");
@@ -54,17 +62,43 @@ namespace UserInyerface.Tests
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
             
-            _createProfilePage.LoginDataForm.PasswordBox.ClearAndType(password);
-            _createProfilePage.LoginDataForm.EmailNameBox.ClearAndType(email);
-            _createProfilePage.LoginDataForm.EmailDomainBox.ClearAndType(domain);
+            _createProfilePage.LoginDataForm.PasswordBox.ClearAndType("STHyiuRfUСю6G");
+            _createProfilePage.LoginDataForm.EmailNameBox.ClearAndType("JSarmpG");
+            _createProfilePage.LoginDataForm.EmailDomainBox.ClearAndType("KoqSf");
             _createProfilePage.LoginDataForm.EmailAfterDotDropdownButton.Click();
-            _createProfilePage.LoginDataForm.EmailAfterDotItems[3].Click();
+
+            int index = _randomizer.Next() % _createProfilePage.LoginDataForm.EmailAfterDotItems.Count;
+            _createProfilePage.LoginDataForm.EmailAfterDotItems[index].Click();
+            
             _createProfilePage.LoginDataForm.AcceptTermsCheckBox.Click();
-            _createProfilePage.LoginDataForm.ConfirmLoginDataButton.Click();
+            _createProfilePage.LoginDataForm.NextStepButton.Click();
             
-            //a["class='avatar-and-interests__upload-button'"]
+            Assert.IsTrue(_createProfilePage.InterestsAndImageForm.State.IsDisplayed, $"{_createProfilePage.InterestsAndImageForm.Name} isn't displayed as expected");
             
+            _createProfilePage.InterestsAndImageForm.ImageUploadButton.Click();
             
+            Process.Start(Path.GetFullPath(_uploaderExecutablePath), Path.GetFullPath(_fileToUploadPath));
+
+            Assert.IsTrue(_createProfilePage.InterestsAndImageForm.UploadedImage.State.WaitForDisplayed(), $"{_createProfilePage.InterestsAndImageForm.UploadedImage.Name} isn't displayed as expected");
+            
+            _createProfilePage.InterestsAndImageForm.UnselectAllCheckbox.Click();
+            
+            int size = _createProfilePage.InterestsAndImageForm.InterestCheckboxes.Count;
+            HashSet<int> checkedIndexes = new HashSet<int>();
+            for (int i = 0; i < 3;)
+            {
+                int nextIndex = _randomizer.Next() % size;
+                if (!checkedIndexes.Contains(nextIndex))
+                {
+                    _createProfilePage.InterestsAndImageForm.InterestCheckboxes[nextIndex].Click();
+                    checkedIndexes.Add(nextIndex);
+                    i++;
+                } 
+            }
+            
+            _createProfilePage.InterestsAndImageForm.NextStepButton.Click();
+
+            Assert.IsTrue(_createProfilePage.PersonalDetailsForm.State.IsDisplayed, $"{_createProfilePage.PersonalDetailsForm.Name} isn't displayed as expected");
         }
         
         [Test]
@@ -78,7 +112,7 @@ namespace UserInyerface.Tests
             
             _createProfilePage.HelpForm.SendToBottomButton.Click();
                 
-            Assert.IsFalse(_createProfilePage.HelpForm.State.IsDisplayed);
+            Assert.IsFalse(_createProfilePage.HelpForm.State.IsDisplayed, $"{_createProfilePage.HelpForm.Name} is still displayed");
         }
         
         [Test]
@@ -92,7 +126,7 @@ namespace UserInyerface.Tests
             
             _createProfilePage.CookiesForm.AcceptButton.Click();
 
-            Assert.IsFalse(_createProfilePage.CookiesForm.State.IsDisplayed);
+            Assert.IsFalse(_createProfilePage.CookiesForm.State.IsDisplayed, $"{_createProfilePage.CookiesForm.Name} is still displayed");
         }
 
         [Test]
@@ -103,7 +137,7 @@ namespace UserInyerface.Tests
             _welcomePage.ToFormButton.Click();   
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
-            
+
             Assert.AreEqual("00", _createProfilePage.Timer.Text.Split(":")[^1]);
         }
 

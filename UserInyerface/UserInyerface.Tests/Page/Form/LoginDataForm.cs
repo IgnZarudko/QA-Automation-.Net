@@ -24,7 +24,7 @@ namespace UserInyerface.Tests.Page.Form
         
 
         private readonly By _emailAfterDotItems = By.XPath("//div[@class='dropdown__list-item']");
-        public IList<Button> EmailAfterDotItems => FormElement.FindChildElements<Button>(_emailAfterDotItems, "Items");
+        public IList<Button> EmailAfterDotItems => FormElement.FindChildElements<Button>(_emailAfterDotItems, "Item");
 
         
         private readonly By _acceptTermsCheckboxLocator = By.XPath("//span[@class='checkbox__box']");
@@ -32,9 +32,9 @@ namespace UserInyerface.Tests.Page.Form
             FormElement.FindChildElement<CheckBox>(_acceptTermsCheckboxLocator, "Accept terms checkbox");
         
         
-        private readonly By _confirmLoginDataButtonLocator = By.XPath("//a[@class='button--secondary']");
-        public Button ConfirmLoginDataButton =>
-            FormElement.FindChildElement<Button>(_confirmLoginDataButtonLocator, "Confirm login data button");
+        private readonly By _nextStepButtonLocator = By.XPath("//a[@class='button--secondary']");
+        public Button NextStepButton =>
+            FormElement.FindChildElement<Button>(_nextStepButtonLocator, "Confirm login data button");
         
         public LoginDataForm(By locator, string name) : base(locator, name)
         {
