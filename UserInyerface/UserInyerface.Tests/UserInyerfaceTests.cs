@@ -61,9 +61,9 @@ namespace UserInyerface.Tests
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
             
-            _createProfilePage.LoginDataForm.PasswordBox.ClearAndType("STHyiuRfUСю6G");
-            _createProfilePage.LoginDataForm.EmailNameBox.ClearAndType("JSarmpG");
-            _createProfilePage.LoginDataForm.EmailDomainBox.ClearAndType("KoqSf");
+            _createProfilePage.LoginDataForm.PasswordBox.ClearAndType(password);
+            _createProfilePage.LoginDataForm.EmailNameBox.ClearAndType(email);
+            _createProfilePage.LoginDataForm.EmailDomainBox.ClearAndType(domain);
             _createProfilePage.LoginDataForm.EmailAfterDotDropdownButton.Click();
 
             int index = _randomizer.Next() % _createProfilePage.LoginDataForm.EmailAfterDotItems.Count;
