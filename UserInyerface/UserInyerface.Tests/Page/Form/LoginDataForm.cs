@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Aquality.Selenium.Elements;
-using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace UserInyerface.Tests.Page.Form

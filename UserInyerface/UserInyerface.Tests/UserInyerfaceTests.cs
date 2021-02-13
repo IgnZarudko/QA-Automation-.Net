@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Aquality.Selenium.Browsers;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -77,7 +76,15 @@ namespace UserInyerface.Tests
             
             _createProfilePage.InterestsAndImageForm.ImageUploadButton.Click();
             
-            Process.Start(Path.GetFullPath(_uploaderExecutablePath), Path.GetFullPath(_fileToUploadPath));
+            switch(_browser.BrowserName)
+            {
+                case BrowserName.Chrome:
+                    Process.Start(Path.GetFullPath(_uploaderExecutablePath), "aaaaa" + Path.GetFullPath(_fileToUploadPath));
+                    break;
+                default:
+                    Process.Start(Path.GetFullPath(_uploaderExecutablePath), Path.GetFullPath(_fileToUploadPath));
+                    break;
+            }
 
             Assert.IsTrue(_createProfilePage.InterestsAndImageForm.UploadedImage.State.WaitForDisplayed(), $"{_createProfilePage.InterestsAndImageForm.UploadedImage.Name} isn't displayed as expected");
             

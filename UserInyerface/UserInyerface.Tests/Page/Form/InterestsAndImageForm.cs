@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Aquality.Selenium.Browsers;
 using Aquality.Selenium.Elements;
 using OpenQA.Selenium;
 
