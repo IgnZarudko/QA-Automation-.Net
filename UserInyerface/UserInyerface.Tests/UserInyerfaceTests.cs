@@ -7,6 +7,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using UserInyerface.Tests.Page;
+using UserInyerface.Tests.Utils;
 
 namespace UserInyerface.Tests
 {
@@ -21,7 +22,6 @@ namespace UserInyerface.Tests
         private static string _russianAlphabet = "АаБбВвГгДдЕеЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя";
         private static string _englishAlphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsRrSsTtUuVvWwXxYyZz";
 
-        private static string _uploaderExecutablePath = "..\\..\\..\\Utils\\Uploader.exe";
         private static string _fileToUploadPath = "..\\..\\..\\Resources\\cheems.png";
         
         [SetUp]
@@ -76,32 +76,13 @@ namespace UserInyerface.Tests
             
             _createProfilePage.InterestsAndImageForm.ImageUploadButton.Click();
             
-            switch(_browser.BrowserName)
-            {
-                case BrowserName.Chrome:
-                    Process.Start(Path.GetFullPath(_uploaderExecutablePath), "aaaaa" + Path.GetFullPath(_fileToUploadPath));
-                    break;
-                default:
-                    Process.Start(Path.GetFullPath(_uploaderExecutablePath), Path.GetFullPath(_fileToUploadPath));
-                    break;
-            }
+            UploadManager.UploadFile(_fileToUploadPath);
 
             Assert.IsTrue(_createProfilePage.InterestsAndImageForm.UploadedImage.State.WaitForDisplayed(), $"{_createProfilePage.InterestsAndImageForm.UploadedImage.Name} isn't displayed as expected");
             
             _createProfilePage.InterestsAndImageForm.UnselectAllCheckbox.Click();
-            
-            int size = _createProfilePage.InterestsAndImageForm.InterestCheckboxes.Count;
-            HashSet<int> checkedIndexes = new HashSet<int>();
-            for (int i = 0; i < 3;)
-            {
-                int nextIndex = _randomizer.Next() % size;
-                if (!checkedIndexes.Contains(nextIndex))
-                {
-                    _createProfilePage.InterestsAndImageForm.InterestCheckboxes[nextIndex].Click();
-                    checkedIndexes.Add(nextIndex);
-                    i++;
-                } 
-            }
+
+            _createProfilePage.InterestsAndImageForm.ChooseInterests(3);
             
             _createProfilePage.InterestsAndImageForm.NextStepButton.Click();
 

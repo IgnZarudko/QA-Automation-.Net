@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Aquality.Selenium.Elements;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 
 namespace UserInyerface.Tests.Page.Form
@@ -34,7 +35,22 @@ namespace UserInyerface.Tests.Page.Form
         {
             
         }
-        
-        
+
+        public void ChooseInterests(int amount)
+        {
+            Randomizer randomizer = new Randomizer();
+            int size = InterestCheckboxes.Count;
+            HashSet<int> checkedIndexes = new HashSet<int>();
+            for (int i = 0; i < 3;)
+            {
+                int nextIndex = randomizer.Next() % size;
+                if (!checkedIndexes.Contains(nextIndex))
+                {
+                    InterestCheckboxes[nextIndex].Click();
+                    checkedIndexes.Add(nextIndex);
+                    i++;
+                } 
+            }
+        }
     }
 }
