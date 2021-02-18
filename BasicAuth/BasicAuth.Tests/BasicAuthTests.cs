@@ -16,6 +16,8 @@ namespace BasicAuth.Tests
         
         private static Browser _browser;
         
+        private static By _switchToAnotherViewButtonLocator = By.XPath("//a[@aria-controls='rawdata-panel']");
+        private static By _responseBodyLocator = By.XPath("//pre");
         
         [SetUp]
         public void Setup()
@@ -39,11 +41,11 @@ namespace BasicAuth.Tests
             if (_browser.BrowserName == BrowserName.Firefox)
             {
                 new WebDriverWait(_browser.Driver, TimeSpan.FromSeconds(10))
-                    .Until(d => _browser.Driver.FindElementByXPath("//a[@aria-controls='rawdata-panel']").Enabled);
-                _browser.Driver.FindElementByXPath("//a[@aria-controls='rawdata-panel']").Click();
+                    .Until(d => _browser.Driver.FindElement(_switchToAnotherViewButtonLocator).Enabled);
+                _browser.Driver.FindElement(_switchToAnotherViewButtonLocator).Click();
             }
             
-            string responseString = _browser.Driver.FindElement(By.XPath("//pre")).Text;
+            string responseString = _browser.Driver.FindElement(_responseBodyLocator).Text;
 
             Response actualResponse = JsonSerializer.Deserialize<Response>(responseString);
             
