@@ -29,10 +29,8 @@ namespace BasicAuth.Tests
         [TestCase("user", "passwd")]
         public void BasicAuth_Test(string username, string password)
         {
-            string urlWithCredentials = _pageUrl.Split("//")[0] +
-                                        $"//{username}:{password}@" +
-                                        _pageUrl.Split("//")[1];
-            
+            string urlWithCredentials = _pageUrl.Replace("//", $"//{username}:{password}@");
+
             _browser.GoTo(urlWithCredentials);
             
             _browser.WaitForPageToLoad();
