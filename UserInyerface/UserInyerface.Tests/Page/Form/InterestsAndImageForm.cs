@@ -17,17 +17,17 @@ namespace UserInyerface.Tests.Page.Form
         
         
         private readonly By _interestCheckboxesLocator = By.XPath("//label[contains(@for, 'interest') and not(contains(@for,'selectall'))]");
-        public IList<Button> InterestCheckboxes =>
+        private IList<Button> InterestCheckboxes =>
             FormElement.FindChildElements<Button>(_interestCheckboxesLocator, "Interest checkbox");
         
         
         private readonly By _unselectAllCheckboxLocator = By.XPath("//label[@for='interest_unselectall']");
-        public Button UnselectAllCheckbox =>
+        private Button UnselectAllCheckbox =>
             FormElement.FindChildElement<Button>(_unselectAllCheckboxLocator, "Unselect all checkbox");
         
         
         private readonly By _nextStepButtonLocator = By.XPath("//button[contains(@class,'button--stroked')]");
-        public Button NextStepButton =>
+        private Button NextStepButton =>
             FormElement.FindChildElement<Button>(_nextStepButtonLocator, "Confirm interests and image button");
 
 
@@ -36,21 +36,24 @@ namespace UserInyerface.Tests.Page.Form
             
         }
 
-        public void ChooseInterests(int amount)
+        public void UnselectAll()
         {
-            Randomizer randomizer = new Randomizer();
-            int size = InterestCheckboxes.Count;
-            HashSet<int> checkedIndexes = new HashSet<int>();
-            for (int i = 0; i < 3;)
-            {
-                int nextIndex = randomizer.Next() % size;
-                if (!checkedIndexes.Contains(nextIndex))
-                {
-                    InterestCheckboxes[nextIndex].Click();
-                    checkedIndexes.Add(nextIndex);
-                    i++;
-                } 
-            }
+            UnselectAllCheckbox.Click();
+        }
+
+        public int AmountOfInterestsAvailable()
+        {
+            return InterestCheckboxes.Count;
+        }
+
+        public void ChooseInterest(int index)
+        {
+            InterestCheckboxes[index].Click();
+        }
+
+        public void GoToNextStep()
+        {
+            NextStepButton.Click();
         }
     }
 }

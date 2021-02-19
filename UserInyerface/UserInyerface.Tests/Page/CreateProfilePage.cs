@@ -31,5 +31,10 @@ namespace UserInyerface.Tests.Page
             InterestsAndImageForm = new InterestsAndImageForm();
             PersonalDetailsForm = new PersonalDetailsForm();
         }
+
+        public string TimerValue()
+        {
+            return Timer.Text.Split(":")[^1];
+        }
     }
 }

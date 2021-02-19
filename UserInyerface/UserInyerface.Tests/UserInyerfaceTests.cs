@@ -58,20 +58,17 @@ namespace UserInyerface.Tests
         {
             Assert.IsTrue(_welcomePage.State.IsDisplayed, $"{_welcomePage.Name} isn't displayed as expected");
             
-            _welcomePage.ToFormButton.Click(); 
+            _welcomePage.GoToForm();
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
             
-            _createProfilePage.LoginDataForm.PasswordBox.ClearAndType(password);
-            _createProfilePage.LoginDataForm.EmailNameBox.ClearAndType(email);
-            _createProfilePage.LoginDataForm.EmailDomainBox.ClearAndType(domain);
-            _createProfilePage.LoginDataForm.EmailAfterDotDropdownButton.Click();
-
-            int index = _randomizer.Next() % _createProfilePage.LoginDataForm.EmailAfterDotItems.Count;
-            _createProfilePage.LoginDataForm.EmailAfterDotItems[index].Click();
+            _createProfilePage.LoginDataForm.EnterData(password, email, domain);
             
-            _createProfilePage.LoginDataForm.AcceptTermsCheckBox.Click();
-            _createProfilePage.LoginDataForm.NextStepButton.Click();
+            
+            _createProfilePage.LoginDataForm.AcceptTerms();
+            
+            
+            _createProfilePage.LoginDataForm.GoToNextStep();
             
             Assert.IsTrue(_createProfilePage.InterestsAndImageForm.State.IsDisplayed, $"{_createProfilePage.InterestsAndImageForm.Name} isn't displayed as expected");
             
@@ -81,11 +78,22 @@ namespace UserInyerface.Tests
 
             Assert.IsTrue(_createProfilePage.InterestsAndImageForm.UploadedImage.State.WaitForDisplayed(), $"{_createProfilePage.InterestsAndImageForm.UploadedImage.Name} isn't displayed as expected");
             
-            _createProfilePage.InterestsAndImageForm.UnselectAllCheckbox.Click();
+            _createProfilePage.InterestsAndImageForm.UnselectAll();
 
-            _createProfilePage.InterestsAndImageForm.ChooseInterests(3);
+            int amountOfInterestsAvailable = _createProfilePage.InterestsAndImageForm.AmountOfInterestsAvailable();
+            HashSet<int> checkedIndexes = new HashSet<int>();
+            for (int i = 0; i < 3;)
+            {
+                int nextIndex = _randomizer.Next() % amountOfInterestsAvailable;
+                if (!checkedIndexes.Contains(nextIndex))
+                {
+                    _createProfilePage.InterestsAndImageForm.ChooseInterest(nextIndex);
+                    checkedIndexes.Add(nextIndex);
+                    i++;
+                } 
+            }
             
-            _createProfilePage.InterestsAndImageForm.NextStepButton.Click();
+            _createProfilePage.InterestsAndImageForm.GoToNextStep();
 
             Assert.IsTrue(_createProfilePage.PersonalDetailsForm.State.IsDisplayed, $"{_createProfilePage.PersonalDetailsForm.Name} isn't displayed as expected");
         }
@@ -95,11 +103,11 @@ namespace UserInyerface.Tests
         {
             Assert.IsTrue(_welcomePage.State.IsDisplayed, $"{_welcomePage.Name} isn't displayed as expected");
             
-            _welcomePage.ToFormButton.Click();   
+            _welcomePage.GoToForm();
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
             
-            _createProfilePage.HelpForm.SendToBottomButton.Click();
+            _createProfilePage.HelpForm.HideForm();
                 
             Assert.IsFalse(_createProfilePage.HelpForm.State.IsDisplayed, $"{_createProfilePage.HelpForm.Name} is still displayed");
         }
@@ -109,11 +117,11 @@ namespace UserInyerface.Tests
         {
             Assert.IsTrue(_welcomePage.State.IsDisplayed, $"{_welcomePage.Name} isn't displayed as expected");
             
-            _welcomePage.ToFormButton.Click();   
+            _welcomePage.GoToForm(); 
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
             
-            _createProfilePage.CookiesForm.AcceptButton.Click();
+            _createProfilePage.CookiesForm.AcceptCookies();
 
             Assert.IsFalse(_createProfilePage.CookiesForm.State.IsDisplayed, $"{_createProfilePage.CookiesForm.Name} is still displayed");
         }
@@ -123,11 +131,11 @@ namespace UserInyerface.Tests
         {
             Assert.IsTrue(_welcomePage.State.IsDisplayed, $"{_welcomePage.Name} isn't displayed as expected");
             
-            _welcomePage.ToFormButton.Click();   
+            _welcomePage.GoToForm();
             
             Assert.IsTrue(_createProfilePage.State.IsDisplayed, $"{_createProfilePage.Name} isn't displayed as expected");
 
-            Assert.AreEqual("00", _createProfilePage.Timer.Text.Split(":")[^1]);
+            Assert.AreEqual("00", _createProfilePage.TimerValue());
         }
 
         [TearDown]
