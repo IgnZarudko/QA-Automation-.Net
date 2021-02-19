@@ -31,7 +31,7 @@ namespace UserInyerface.Tests.Page.Form
             FormElement.FindChildElement<Button>(_nextStepButtonLocator, "Confirm interests and image button");
 
 
-        public InterestsAndImageForm(By locator, string name) : base(locator, name)
+        public InterestsAndImageForm() : base(By.XPath("//div[@class='avatar-and-interests-page']"), "Interests and image form")
         {
             
         }

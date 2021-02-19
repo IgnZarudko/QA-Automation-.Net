@@ -8,7 +8,7 @@ namespace UserInyerface.Tests.Page.Form
         private readonly By _acceptButtonLocator = By.XPath("//button[contains(@class,'button--transparent')]");
         public Button AcceptButton => FormElement.FindChildElement<Button>(_acceptButtonLocator, "Accept cookies");
 
-        public CookiesForm(By locator, string name) : base(locator, name)
+        public CookiesForm() : base(By.XPath("//div[@class='cookies']"), "Cookies form")
         {
             
         }

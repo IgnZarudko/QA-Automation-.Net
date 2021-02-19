@@ -35,7 +35,7 @@ namespace UserInyerface.Tests.Page.Form
         public Button NextStepButton =>
             FormElement.FindChildElement<Button>(_nextStepButtonLocator, "Confirm login data button");
         
-        public LoginDataForm(By locator, string name) : base(locator, name)
+        public LoginDataForm() : base(By.XPath("//div[@class='login-form__container']"), "Login data form")
         {
             
         }

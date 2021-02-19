@@ -8,7 +8,7 @@ namespace UserInyerface.Tests.Page.Form
         private readonly By _sendToBottomButtonLocator = By.XPath("//button[contains(@class,'send-to-bottom-button')]");
         public Button SendToBottomButton => FormElement.FindChildElement<Button>(_sendToBottomButtonLocator, "Accept cookies");
         
-        public HelpForm(By locator, string name) : base(locator, name)
+        public HelpForm() : base(By.XPath("//div[@class='help-form']"), "Help form")
         {
             
         }

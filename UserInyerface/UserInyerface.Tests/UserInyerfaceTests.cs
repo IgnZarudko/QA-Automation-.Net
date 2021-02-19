@@ -6,6 +6,7 @@ using Aquality.Selenium.Browsers;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using OpenQA.Selenium;
+using UserInyerface.Tests.Constants;
 using UserInyerface.Tests.Page;
 using UserInyerface.Tests.Utils;
 
@@ -34,18 +35,18 @@ namespace UserInyerface.Tests
             
             _randomizer = new Randomizer(12);
             
-            _welcomePage = new WelcomePage(By.XPath("//div[@class='start view view--center']"), "Welcome page");
-            _createProfilePage = new CreateProfilePage(By.XPath("//div[@class='game view']"), "Create profile page");
+            _welcomePage = new WelcomePage();
+            _createProfilePage = new CreateProfilePage();
         }
 
         private static IEnumerable<TestCaseData> PasswordAndEmail()
         {
             Randomizer rand = new Randomizer();
             
-            string email = rand.GetString(7, _englishAlphabet);
-            string domain = rand.GetString(5, _englishAlphabet);
-            string password = rand.GetString(9, _englishAlphabet);
-            password += rand.GetString(2, _russianAlphabet);
+            string email = rand.GetString(LoginDataLengths.EMAIL_LENGTH, _englishAlphabet);
+            string domain = rand.GetString(LoginDataLengths.DOMAIN_LENGTH, _englishAlphabet);
+            string password = rand.GetString(LoginDataLengths.PASSWORD_EN_PART_LENGTH, _englishAlphabet);
+            password += rand.GetString(LoginDataLengths.PASSWORD_RU_PART_LENGTH, _russianAlphabet);
             password += rand.Next() % 10;
             password += email.Last();
             

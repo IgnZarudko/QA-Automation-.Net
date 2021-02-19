@@ -8,7 +8,7 @@ namespace UserInyerface.Tests.Page
         private readonly By _toFormButtonLocator = By.XPath("//a[@class='start__link']");
         public Button ToFormButton => FormElement.FindChildElement<Button>(_toFormButtonLocator, "To form button");
 
-        public WelcomePage(By locator, string name) : base(locator, name)
+        public WelcomePage() : base(By.XPath("//div[@class='start view view--center']"), "Welcome page")
         {
             
         }
