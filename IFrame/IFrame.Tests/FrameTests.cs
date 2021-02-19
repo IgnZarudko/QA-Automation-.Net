@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Threading;
 using Aquality.Selenium.Browsers;
 using IFrame.Tests.Page;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 
 namespace IFrame.Tests
@@ -19,18 +21,26 @@ namespace IFrame.Tests
             _browser.Maximize();
             _browser.GoTo("http://the-internet.herokuapp.com/iframe");
             
-            _iFramePage = new IFramePage(By.XPath("//div[@class='example']"), "IFrame page");
+            _iFramePage = new IFramePage();
         }
 
-        [Test]
-        public void IFrameBoldText_Test()
+        private static IEnumerable<TestCaseData> RandomStringToInput()
+        {
+            Randomizer randomizer = new Randomizer();
+            string stringToType = randomizer.GetString(randomizer.Next() % 255 + 1);
+            yield return new TestCaseData(stringToType);
+        }
+        
+        [TestCaseSource(typeof(FrameTests), nameof(RandomStringToInput))]
+        public void IFrameBoldText_Test(string inputString)
         {
             Assert.IsTrue(_iFramePage.State.IsDisplayed);
             
-            _iFramePage.EnterText("dadad");
+            _iFramePage.EnterTextAndSelect(inputString);
             
-            Thread.Sleep(2000);
-
+            _iFramePage.SetTextToBold();
+            
+            Assert.AreEqual(inputString, _iFramePage.BoldTextValue());
         }
 
         [TearDown]
