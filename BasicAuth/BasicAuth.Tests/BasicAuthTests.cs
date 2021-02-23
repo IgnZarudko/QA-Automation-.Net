@@ -1,19 +1,9 @@
-using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using System.Threading;
 using Aquality.Selenium.Browsers;
-using Aquality.Selenium.Configurations;
-using Aquality.Selenium.Elements;
+using Aquality.Selenium.Core.Configurations;
 using BasicAuth.Tests.Page;
 using Flurl;
-using Flurl.Http;
-using NLog;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
+
 
 namespace BasicAuth.Tests
 {
@@ -23,28 +13,27 @@ namespace BasicAuth.Tests
 
         private ResponsePage _responsePage;
 
-        private const string Url = "https://httpbin.org/basic-auth";
+        private static string _url;
         
         [SetUp]
         public void Setup()
         {
             _browser = AqualityServices.Browser;
             _browser.Maximize();
-
+            
+            _url = AqualityServices.Get<ISettingsFile>().GetValue<string>(".hostUrl");
+            
             _responsePage = new ResponsePage();
         }
 
         [TestCase("user", "passwd")]
         public void BasicAuth_Test(string username, string password)
         {
-            var urlWithCredentials = Url
+            var urlWithCredentials = _url
                 .AppendPathSegments(username, password)
                 .ToUri().ToString()
                 .Replace("//", $"//{username}:{password}@");
-            
-            
-            LogManager.GetLogger("In-test log").Info(urlWithCredentials);
-            
+
             _browser.GoTo(urlWithCredentials);
             
             _browser.WaitForPageToLoad();
