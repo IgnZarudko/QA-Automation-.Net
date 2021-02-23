@@ -13,6 +13,8 @@ namespace IFrame.Tests.Page
 
         private ITextBox TextBox => ElementFactory.GetTextBox(By.XPath("//p"), "Text field of iFrame");
         private ITextBox BoldTextBox => ElementFactory.GetTextBox(By.XPath("//strong"), "Bold text");
+
+        private static string _iFrameId = "mce_0_ifr";
         
         public IFramePage() : base(By.XPath("//div[@class='example']"), "IFrame page")
         {
@@ -53,7 +55,7 @@ namespace IFrame.Tests.Page
         
         private void SwitchToIFrame()
         {
-            AqualityServices.Browser.Driver.SwitchTo().Frame("mce_0_ifr");
+            AqualityServices.Browser.Driver.SwitchTo().Frame(_iFrameId);
         }
 
         private void SwitchToPage()

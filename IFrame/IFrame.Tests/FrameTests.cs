@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Threading;
 using Aquality.Selenium.Browsers;
+using Aquality.Selenium.Core.Configurations;
 using IFrame.Tests.Page;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -11,36 +13,39 @@ namespace IFrame.Tests
     public class FrameTests
     {
         private Browser _browser;
-        
-        private IFramePage _iFramePage;
+
+        private static string _url;
         
         [SetUp]
         public void Setup()
         {
+            _url = AqualityServices.Get<ISettingsFile>().GetValue<string>(".hostUrl");
+            
             _browser = AqualityServices.Browser;
             _browser.Maximize();
-            _browser.GoTo("http://the-internet.herokuapp.com/iframe");
-            
-            _iFramePage = new IFramePage();
+            _browser.GoTo(_url);
+            _browser.WaitForPageToLoad();
         }
 
         private static IEnumerable<TestCaseData> RandomStringToInput()
         {
             Randomizer randomizer = new Randomizer();
-            string stringToType = randomizer.GetString(randomizer.Next() % 255 + 1);
+            string stringToType = randomizer.GetString();
             yield return new TestCaseData(stringToType);
         }
         
         [TestCaseSource(typeof(FrameTests), nameof(RandomStringToInput))]
         public void IFrameBoldText_Test(string inputString)
         {
-            Assert.IsTrue(_iFramePage.State.IsDisplayed);
+            IFramePage iFramePage = new IFramePage();
             
-            _iFramePage.EnterTextAndSelect(inputString);
+            Assert.IsTrue(iFramePage.State.IsDisplayed);
             
-            _iFramePage.SetTextToBold();
+            iFramePage.EnterTextAndSelect(inputString);
             
-            Assert.AreEqual(inputString, _iFramePage.BoldTextValue());
+            iFramePage.SetTextToBold();
+            
+            Assert.AreEqual(inputString, iFramePage.BoldTextValue());
         }
 
         [TearDown]
