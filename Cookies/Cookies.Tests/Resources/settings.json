@@ -3,6 +3,7 @@
   "isRemote": false,
   "remoteConnectionUrl": "http://localhost:4444/wd/hub",
   "isElementHighlightEnabled": false,
+  "hostUrl" : "http://example.com/",
 
   "driverSettings": {
     "chrome": {

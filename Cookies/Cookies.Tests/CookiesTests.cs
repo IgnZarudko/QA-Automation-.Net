@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Aquality.Selenium.Browsers;
+using Aquality.Selenium.Core.Configurations;
 using Aquality.Selenium.Elements.Actions;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -9,19 +10,17 @@ namespace Cookies.Tests
     public class CookiesTests
     {
         private static Browser _browser;
+
+        private static string _url;
         
         [SetUp]
         public void Setup()
         {
             _browser = AqualityServices.Browser;
             _browser.Maximize();
-            _browser.GoTo("http://example.com/");
-            _browser.WaitForPageToLoad();
+
+            _url = AqualityServices.Get<ISettingsFile>().GetValue<string>(".hostUrl");
         }
-        
-        //example_key_1:example_value_1
-        // example_key_2:example_value_2
-        // example_key_3:example_value_3
 
         private static IEnumerable<TestCaseData> CookiesProvider()
         {
@@ -40,6 +39,9 @@ namespace Cookies.Tests
         [TestCaseSource(typeof(CookiesTests), nameof(CookiesProvider))]
         public void Cookies_Test(List<Cookie> toInsert, Cookie toDelete, Cookie toUpdate)
         {
+            _browser.GoTo(_url);
+            _browser.WaitForPageToLoad();
+            
             foreach (var cookie in toInsert)
             {
                 _browser.Driver.Manage().Cookies.AddCookie(cookie);
