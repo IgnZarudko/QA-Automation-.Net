@@ -14,7 +14,8 @@ namespace Api.Tests
 {
     public class ApiTests
     {
-        private static string _baseUrl = "https://jsonplaceholder.typicode.com";
+        private static string _configPath = "../../../Resources/settings.json";
+        private static readonly Configs Configs = JsonParser.ParseObject<Configs>(File.ReadAllText(Path.GetFullPath(_configPath)));
 
         private static ILog _logger;
 
@@ -22,7 +23,7 @@ namespace Api.Tests
         public void SetUp()
         {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+            XmlConfigurator.Configure(logRepository, new FileInfo(Configs.LoggerConfigFile));
 
             _logger = LogManager.GetLogger(typeof(ApiTests));
         }
@@ -30,7 +31,7 @@ namespace Api.Tests
 
         private static IEnumerable<TestCaseData> IsSortedByIdTestData()
         {
-            yield return new TestCaseData(_baseUrl.AppendPathSegments("posts"));
+            yield return new TestCaseData(Configs.BaseUrl.AppendPathSegments("posts"));
         }
 
         [TestCaseSource(typeof(ApiTests), nameof(IsSortedByIdTestData))]
@@ -49,7 +50,7 @@ namespace Api.Tests
         {
             int expectedId = 99;
             int expectedUserId = 10;
-            var url = _baseUrl.AppendPathSegments("posts", expectedId);
+            var url = Configs.BaseUrl.AppendPathSegments("posts", expectedId);
             
             yield return new TestCaseData(url, expectedId, expectedUserId);
         }
@@ -71,7 +72,7 @@ namespace Api.Tests
         private static IEnumerable<TestCaseData> GetByUnrealIdReturnsEmptyTestCaseData()
         {
             int id = 150;
-            var url = _baseUrl.AppendPathSegments("posts", id);
+            var url = Configs.BaseUrl.AppendPathSegments("posts", id);
             string expectedResponseString = "{}";
             
             yield return new TestCaseData(url, expectedResponseString);
@@ -92,7 +93,7 @@ namespace Api.Tests
         {
             Randomizer randomizer = new Randomizer();
 
-            var url = _baseUrl.AppendPathSegment("posts");
+            var url = Configs.BaseUrl.AppendPathSegment("posts");
             
             Post post = new Post
             {
@@ -125,10 +126,10 @@ namespace Api.Tests
 
         public static IEnumerable<TestCaseData> GetUsersTestCaseData()
         {
-            var url = _baseUrl.AppendPathSegment("users");
+            var url = Configs.BaseUrl.AppendPathSegment("users");
             string userJson = File.ReadAllText(Path.GetFullPath("../../../Resources/user.json"));
 
-            User user = UserJsonParser.ParseUser(userJson);
+            User user = JsonParser.ParseObject<User>(userJson);
 
             yield return new TestCaseData(url, user);
         }
@@ -161,9 +162,9 @@ namespace Api.Tests
         {
             string userJson = File.ReadAllText(Path.GetFullPath("../../../Resources/user.json"));
 
-            User user = UserJsonParser.ParseUser(userJson);
+            User user = JsonParser.ParseObject<User>(userJson);
 
-            var url = _baseUrl.AppendPathSegments("users", user.Id);
+            var url = Configs.BaseUrl.AppendPathSegments("users", user.Id);
             
             yield return new TestCaseData(url, user);
         }
@@ -175,7 +176,7 @@ namespace Api.Tests
             
             Assert.AreEqual(ResponseCodes.GET_OK, responseCode, "Response status code is different");
             
-            User user = UserJsonParser.ParseUser(userJson);
+            User user = JsonParser.ParseObject<User>(userJson);
             
             Assert.AreEqual(expectedUser, user, "Users are not equal");
         }
