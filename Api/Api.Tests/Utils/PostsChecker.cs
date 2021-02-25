@@ -12,9 +12,9 @@ namespace Api.Tests.Utils
             LogManager.GetLogger(typeof(PostsChecker)).Info($"Got {posts.Count} posts to check");
             do
             {
-                if (posts[i + 1].id <= posts[i].id)
+                if (posts[i + 1].Id <= posts[i].Id)
                 {
-                    LogManager.GetLogger(typeof(PostsChecker)).Error($"Post with id {posts[i].id} stays before post with id {posts[i + 1].id}");
+                    LogManager.GetLogger(typeof(PostsChecker)).Error($"Post with id {posts[i].Id} stays before post with id {posts[i + 1].Id}");
                     return false;
                 }
                 i++;

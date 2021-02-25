@@ -1,17 +1,29 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Api.Tests.Models
 {
-    public class Address {
-        public string street { get; set; } 
-        public string suite { get; set; } 
-        public string city { get; set; } 
-        public string zipcode { get; set; } 
-        public Geo geo { get; set; }
+    public class Address
+    {
+        
+        [JsonProperty("street")]
+        public string Street { get; set; } 
+
+        [JsonProperty("suite")]
+        public string Suite { get; set; } 
+
+        [JsonProperty("city")]
+        public string City { get; set; } 
+
+        [JsonProperty("zipcode")]
+        public string Zipcode { get; set; } 
+
+        [JsonProperty("geo")]
+        public Geo Geo { get; set; }
 
         protected bool Equals(Address other)
         {
-            return street == other.street && suite == other.suite && city == other.city && zipcode == other.zipcode && Equals(geo, other.geo);
+            return Street == other.Street && Suite == other.Suite && City == other.City && Zipcode == other.Zipcode && Equals(Geo, other.Geo);
         }
 
         public override bool Equals(object obj)
@@ -24,7 +36,7 @@ namespace Api.Tests.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(street, suite, city, zipcode, geo);
+            return HashCode.Combine(Street, Suite, City, Zipcode, Geo);
         }
     }
 }

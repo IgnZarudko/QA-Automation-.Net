@@ -1,15 +1,22 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Api.Tests.Models
 {
-    public class Company    {
-        public string name { get; set; } 
-        public string catchPhrase { get; set; } 
-        public string bs { get; set; }
+    public class Company    
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; } 
+
+        [JsonProperty("catchPhrase")]
+        public string CatchPhrase { get; set; } 
+
+        [JsonProperty("bs")]
+        public string Bs { get; set; }
 
         protected bool Equals(Company other)
         {
-            return name == other.name && catchPhrase == other.catchPhrase && bs == other.bs;
+            return Name == other.Name && CatchPhrase == other.CatchPhrase && Bs == other.Bs;
         }
 
         public override bool Equals(object obj)
@@ -22,7 +29,7 @@ namespace Api.Tests.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(name, catchPhrase, bs);
+            return HashCode.Combine(Name, CatchPhrase, Bs);
         }
     }
 }

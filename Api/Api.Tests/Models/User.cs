@@ -1,20 +1,37 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Api.Tests.Models
 {
-    public class User {
-        public int id { get; set; } 
-        public string name { get; set; } 
-        public string username { get; set; } 
-        public string email { get; set; } 
-        public Address address { get; set; } 
-        public string phone { get; set; } 
-        public string website { get; set; } 
-        public Company company { get; set; }
+    public class User    
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; } 
+
+        [JsonProperty("name")]
+        public string Name { get; set; } 
+
+        [JsonProperty("username")]
+        public string Username { get; set; } 
+
+        [JsonProperty("email")]
+        public string Email { get; set; } 
+
+        [JsonProperty("address")]
+        public Address Address { get; set; } 
+
+        [JsonProperty("phone")]
+        public string Phone { get; set; } 
+
+        [JsonProperty("website")]
+        public string Website { get; set; } 
+
+        [JsonProperty("company")]
+        public Company Company { get; set; }
 
         protected bool Equals(User other)
         {
-            return id == other.id && name == other.name && username == other.username && email == other.email && Equals(address, other.address) && phone == other.phone && website == other.website && Equals(company, other.company);
+            return Id == other.Id && Name == other.Name && Username == other.Username && Email == other.Email && Equals(Address, other.Address) && Phone == other.Phone && Website == other.Website && Equals(Company, other.Company);
         }
 
         public override bool Equals(object obj)
@@ -27,7 +44,7 @@ namespace Api.Tests.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(id, name, username, email, address, phone, website, company);
+            return HashCode.Combine(Id, Name, Username, Email, Address, Phone, Website, Company);
         }
     }
 }

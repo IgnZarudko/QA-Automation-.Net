@@ -1,14 +1,19 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Api.Tests.Models
 {
-    public class Geo {
-        public string lat { get; set; } 
-        public string lng { get; set; }
+    public class Geo 
+    {
+        [JsonProperty("lat")]
+        public string Lat { get; set; } 
+
+        [JsonProperty("lng")]
+        public string Lng { get; set; }
 
         protected bool Equals(Geo other)
         {
-            return lat == other.lat && lng == other.lng;
+            return Lat == other.Lat && Lng == other.Lng;
         }
 
         public override bool Equals(object obj)
@@ -21,7 +26,7 @@ namespace Api.Tests.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(lat, lng);
+            return HashCode.Combine(Lat, Lng);
         }
     }
 }

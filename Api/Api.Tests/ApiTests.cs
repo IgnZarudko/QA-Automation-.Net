@@ -4,7 +4,6 @@ using System.Reflection;
 using Api.Tests.Models;
 using Api.Tests.Utils;
 using Flurl;
-using Flurl.Http;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json;
@@ -58,17 +57,15 @@ namespace Api.Tests
         [TestCaseSource(typeof(ApiTests), nameof(GetPostByIdIsCorrectTestCaseData))]
         public void GetPostByIdIsCorrect(Url url, int expectedId, int expectedUserId)
         {
-            _logger.Info($"Got url: {url} for GET request");
-            
             (int responseCode, string postJson) = ApiUtils.Get(url);
 
             Post actualPost = JsonParser.ParseObject<Post>(postJson);
             
             Assert.AreEqual(ResponseCodes.GET_OK, responseCode, "Expected other response code");
-            Assert.AreEqual(expectedId, actualPost.id, "Ids are not equal");
-            Assert.AreEqual(expectedUserId, actualPost.userId, "User Ids are not equal");
-            Assert.IsFalse(actualPost.title.Length == 0, "Title is empty");
-            Assert.IsFalse(actualPost.body.Length == 0, "Body is empty");
+            Assert.AreEqual(expectedId, actualPost.Id, "Ids are not equal");
+            Assert.AreEqual(expectedUserId, actualPost.UserId, "User Ids are not equal");
+            Assert.IsFalse(actualPost.Title.Length == 0, "Title is empty");
+            Assert.IsFalse(actualPost.Body.Length == 0, "Body is empty");
         }
         
         private static IEnumerable<TestCaseData> GetByUnrealIdReturnsEmptyTestCaseData()
@@ -99,9 +96,9 @@ namespace Api.Tests
             
             Post post = new Post
             {
-                userId = 1,
-                title = randomizer.GetString(),
-                body = randomizer.GetString()
+                UserId = 1,
+                Title = randomizer.GetString(),
+                Body = randomizer.GetString()
             };
             yield return new TestCaseData(url, post);
         }
@@ -119,9 +116,9 @@ namespace Api.Tests
             
             _logger.Info($"Got response post: {jsonStr}");
             
-            Assert.AreEqual(newPost.userId, responsePost.userId, "Post ids are different");
-            Assert.AreEqual(newPost.title, responsePost.title, "Posts titles are different");
-            Assert.AreEqual(newPost.body, responsePost.body, "Posts bodies are different");
+            Assert.AreEqual(newPost.UserId, responsePost.UserId, "Post ids are different");
+            Assert.AreEqual(newPost.Title, responsePost.Title, "Posts titles are different");
+            Assert.AreEqual(newPost.Body, responsePost.Body, "Posts bodies are different");
         }
 
 
@@ -138,13 +135,49 @@ namespace Api.Tests
 
 
         [TestCaseSource(typeof(ApiTests), nameof(GetUsersTestCaseData))]
-        public void GetUsersTest(Url url, User user)
+        public void GetUsersTest(Url url, User userExpected)
         {
             (int responseCode, string usersJson) = ApiUtils.Get(url);
-
+            
+            Assert.AreEqual(ResponseCodes.GET_OK, responseCode, "Response status code is different");
+            
             List<User> users = JsonParser.ParseList<User>(usersJson);
+
+            User userToCheck = null;
+            foreach (var user in users)
+            {
+                if (user.Id == userExpected.Id)
+                {
+                    userToCheck = user;
+                    break;
+                }
+            }
+            Assert.NotNull(userToCheck, "User having this id was not found");
             
+            Assert.AreEqual(userExpected, userToCheck, "Users are not equal");
+        }
+        
+        public static IEnumerable<TestCaseData> GetUserByIdTestCaseData()
+        {
+            string userJson = File.ReadAllText(Path.GetFullPath("../../../Resources/user.json"));
+
+            User user = UserJsonParser.ParseUser(userJson);
+
+            var url = _baseUrl.AppendPathSegments("users", user.Id);
             
+            yield return new TestCaseData(url, user);
+        }
+
+        [TestCaseSource(typeof(ApiTests), nameof(GetUserByIdTestCaseData))]
+        public void GetUserByIdTest(Url url, User expectedUser)
+        {
+            (int responseCode, string userJson) = ApiUtils.Get(url);
+            
+            Assert.AreEqual(ResponseCodes.GET_OK, responseCode, "Response status code is different");
+            
+            User user = UserJsonParser.ParseUser(userJson);
+            
+            Assert.AreEqual(expectedUser, user, "Users are not equal");
         }
     }
 }

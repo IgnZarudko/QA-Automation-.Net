@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Api.Tests.Models;
 using Newtonsoft.Json;
-using NUnit.Framework;
 
 namespace Api.Tests.Utils
 {

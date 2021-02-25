@@ -1,20 +1,25 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Api.Tests.Models
 {
-    public class Post
+    public class Post    
     {
-        public int userId { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; } 
 
-        public int id { get; set; }
+        [JsonProperty("userId")]
+        public int UserId { get; set; } 
 
-        public string title { get; set; }
+        [JsonProperty("title")]
+        public string Title { get; set; } 
 
-        public string body { get; set; }
+        [JsonProperty("body")]
+        public string Body { get; set; }
 
         protected bool Equals(Post other)
         {
-            return userId == other.userId && id == other.id && title == other.title && body == other.body;
+            return Id == other.Id && UserId == other.UserId && Title == other.Title && Body == other.Body;
         }
 
         public override bool Equals(object obj)
@@ -27,7 +32,7 @@ namespace Api.Tests.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(userId, id, title, body);
+            return HashCode.Combine(Id, UserId, Title, Body);
         }
     }
 }
