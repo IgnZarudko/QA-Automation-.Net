@@ -6,7 +6,7 @@ namespace Api.Tests.Utils
 {
     public class PostsChecker
     {
-        public static bool IsListSortedById(List<Post> posts)
+        public static bool ArePostsSortedById(List<Post> posts)
         {
             int i = 0;
             LogManager.GetLogger(typeof(PostsChecker)).Info($"Got {posts.Count} posts to check");

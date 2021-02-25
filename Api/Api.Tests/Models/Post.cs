@@ -4,13 +4,13 @@ namespace Api.Tests.Models
 {
     public class Post
     {
-        public int userId;
+        public int userId { get; set; }
 
-        public int id;
+        public int id { get; set; }
 
-        public string title;
+        public string title { get; set; }
 
-        public string body;
+        public string body { get; set; }
 
         protected bool Equals(Post other)
         {

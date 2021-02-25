@@ -18,7 +18,7 @@ namespace Api.Tests
         private static string _baseUrl = "https://jsonplaceholder.typicode.com";
 
         private static ILog _logger;
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -37,17 +37,16 @@ namespace Api.Tests
         [TestCaseSource(typeof(ApiTests), nameof(IsSortedByIdTestData))]
         public void PostsAreSortedById(Url url)
         {
-            var response = url.AllowAnyHttpStatus().GetAsync();
-            var jsonStr = response.Result.GetStringAsync().Result;
+            (int responseCode, string postsJson) = ApiUtils.Get(url);
+
+            List<Post> posts = JsonParser.ParseList<Post>(postsJson);
             
-            Assert.AreEqual(ResponseCodes.GET_OK, response.Result.StatusCode, "Expected other response code");
+            Assert.AreEqual(ResponseCodes.GET_OK, responseCode, "Expected other response code");
 
-            List<Post> posts = PostJsonParser.ParseListOfPosts(jsonStr);
-
-            Assert.IsTrue(PostsChecker.IsListSortedById(posts), "Expected that posts are sorted by id");
+            Assert.IsTrue(PostsChecker.ArePostsSortedById(posts), "Expected that posts are sorted by id");
         }
 
-        private static IEnumerable<TestCaseData> GetByIdIsCorrectTestCaseData()
+        private static IEnumerable<TestCaseData> GetPostByIdIsCorrectTestCaseData()
         {
             int expectedId = 99;
             int expectedUserId = 10;
@@ -56,18 +55,16 @@ namespace Api.Tests
             yield return new TestCaseData(url, expectedId, expectedUserId);
         }
 
-        [TestCaseSource(typeof(ApiTests), nameof(GetByIdIsCorrectTestCaseData))]
-        public void GetByIdIsCorrect(Url url, int expectedId, int expectedUserId)
+        [TestCaseSource(typeof(ApiTests), nameof(GetPostByIdIsCorrectTestCaseData))]
+        public void GetPostByIdIsCorrect(Url url, int expectedId, int expectedUserId)
         {
             _logger.Info($"Got url: {url} for GET request");
             
-            var response = url.AllowAnyHttpStatus().GetAsync();
-            var jsonStr = response.Result.GetStringAsync().Result;
+            (int responseCode, string postJson) = ApiUtils.Get(url);
 
-            Assert.AreEqual(ResponseCodes.GET_OK, response.Result.StatusCode, "Expected other response code");
-
-            Post actualPost = PostJsonParser.ParsePost(jsonStr);
+            Post actualPost = JsonParser.ParseObject<Post>(postJson);
             
+            Assert.AreEqual(ResponseCodes.GET_OK, responseCode, "Expected other response code");
             Assert.AreEqual(expectedId, actualPost.id, "Ids are not equal");
             Assert.AreEqual(expectedUserId, actualPost.userId, "User Ids are not equal");
             Assert.IsFalse(actualPost.title.Length == 0, "Title is empty");
@@ -88,12 +85,10 @@ namespace Api.Tests
         {
             _logger.Info($"Got url: {url} for GET request");
 
-            var response = url.AllowAnyHttpStatus().GetAsync();
-            var jsonStr = response.Result.GetStringAsync().Result;
-
-            Assert.AreEqual(ResponseCodes.PAGE_NOT_FOUND, response.Result.StatusCode, "Expected other response code");
+            (int responseCode, string postJson) = ApiUtils.Get(url);
             
-            Assert.AreEqual(expectedResponseString, jsonStr, "Response body is not empty");
+            Assert.AreEqual(ResponseCodes.PAGE_NOT_FOUND, responseCode, "Expected other response code");
+            Assert.AreEqual(expectedResponseString, postJson, "Response body is not empty");
         }
 
         private static IEnumerable<TestCaseData> PostRequestOfPostTestCaseData()
@@ -105,7 +100,6 @@ namespace Api.Tests
             Post post = new Post
             {
                 userId = 1,
-                id = 101,
                 title = randomizer.GetString(),
                 body = randomizer.GetString()
             };
@@ -115,21 +109,42 @@ namespace Api.Tests
         [TestCaseSource(typeof(ApiTests), nameof(PostRequestOfPostTestCaseData))]
         public void PostRequestOfPostTest(Url url, Post newPost)
         {
-            string postJson = JsonConvert.SerializeObject(newPost);
-
-            postJson = "{\"userId\": 1, \"title\" : \"titititi\", \"body\" : \"ihfak\"}";
+            (int responseCode, string jsonStr) = ApiUtils.Post(url, newPost);
             
-            var response = url.AllowAnyHttpStatus().PostStringAsync(postJson).Result;
-            var jsonStr = response.GetStringAsync().Result;
+            Assert.AreEqual(ResponseCodes.POST_OK, responseCode, "Response status code is different");
             
-            Assert.AreEqual(ResponseCodes.POST_OK, response.StatusCode, "Response status code is different");
-
+            _logger.Info($"Post was sent: {JsonConvert.SerializeObject(newPost)}");
+            
             Post responsePost = JsonConvert.DeserializeObject<Post>(jsonStr);
             
-            _logger.Info($"Post was posted: {postJson}");
             _logger.Info($"Got response post: {jsonStr}");
-            Assert.AreEqual(newPost, responsePost, "Posts are different");
+            
+            Assert.AreEqual(newPost.userId, responsePost.userId, "Post ids are different");
+            Assert.AreEqual(newPost.title, responsePost.title, "Posts titles are different");
+            Assert.AreEqual(newPost.body, responsePost.body, "Posts bodies are different");
         }
-        
+
+
+
+        public static IEnumerable<TestCaseData> GetUsersTestCaseData()
+        {
+            var url = _baseUrl.AppendPathSegment("users");
+            string userJson = File.ReadAllText(Path.GetFullPath("../../../Resources/user.json"));
+
+            User user = UserJsonParser.ParseUser(userJson);
+
+            yield return new TestCaseData(url, user);
+        }
+
+
+        [TestCaseSource(typeof(ApiTests), nameof(GetUsersTestCaseData))]
+        public void GetUsersTest(Url url, User user)
+        {
+            (int responseCode, string usersJson) = ApiUtils.Get(url);
+
+            List<User> users = JsonParser.ParseList<User>(usersJson);
+            
+            
+        }
     }
 }
