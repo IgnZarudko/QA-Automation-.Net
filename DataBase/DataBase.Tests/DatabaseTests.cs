@@ -41,21 +41,9 @@ namespace DataBase.Tests
         {
             MySqlDataReader reader = _utils.ExecuteQuery(DatabaseQueries.SELECT_TEST_WITH_MIN_TIME_AND_PROJECTS);
 
-            List<TestWithProjectAndMinTime> testsList = new List<TestWithProjectAndMinTime>();
-            int nullTests = 0;
-            while (reader.Read())
-            {
-                try
-                {
-                    TestWithProjectAndMinTime test = DatabaseParser.ParseTestWithProjectAndMinTime(reader);
-
-                    testsList.Add(test);
-                }
-                catch (InvalidOperationException)
-                {
-                    nullTests++;
-                }
-            }
+            List<TestWithProjectAndMinTime> testsList =
+                DatabaseParser.ParseAllTestsWithProjectAndMinTime(reader, out var nullTests);
+            
             LogManager.GetLogger(nameof(MinimalTimeTest)).Warn($"{nullTests} rows haven't been processed due to some fields were null");
             
             string jsonResult = JsonConvert.SerializeObject(testsList, Formatting.Indented);
