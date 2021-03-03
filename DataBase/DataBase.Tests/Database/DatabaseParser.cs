@@ -51,6 +51,17 @@ namespace DataBase.Tests.Database
 
             return tests;
         }
+
+        public static List<BrowserWithTestsExecuted> ParseAllBrowsersWithTestsExecuted(MySqlDataReader reader)
+        {
+            List<BrowserWithTestsExecuted> browsers = new List<BrowserWithTestsExecuted>();
+            while (reader.Read()) 
+            {
+                browsers.Add(new BrowserWithTestsExecuted(reader[0].ToString(), int.Parse(reader[1].ToString()!)));
+            }
+
+            return browsers;
+        }
         
         private static TestWithProjectAndMinTime ParseTestWithProjectAndMinTime(MySqlDataReader reader)
         {

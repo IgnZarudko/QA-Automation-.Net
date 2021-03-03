@@ -77,7 +77,18 @@ namespace DataBase.Tests
             string jsonResult = JsonConvert.SerializeObject(testsList, Formatting.Indented);
             
             LogManager.GetLogger(nameof(MinimalTimeTest)).Info($"Got resulting JSON: {jsonResult}");
+        }
 
+        [Test]
+        public void AmountOfTestsOnFirefoxAndChrome()
+        {
+            MySqlDataReader reader = _utils.ExecuteQuery(DatabaseQueries.SELECT_AMOUNT_OF_TESTS_ON_FIREFOX_AND_CHROME);
+
+            List<BrowserWithTestsExecuted> browsersList = DatabaseParser.ParseAllBrowsersWithTestsExecuted(reader);
+            
+            string jsonResult = JsonConvert.SerializeObject(browsersList, Formatting.Indented);
+            
+            LogManager.GetLogger(nameof(MinimalTimeTest)).Info($"Got resulting JSON: {jsonResult}");
         }
 
         [TearDown]

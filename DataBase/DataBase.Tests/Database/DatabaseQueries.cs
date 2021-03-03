@@ -24,5 +24,13 @@
                                                                             "WHERE DATEDIFF(test.end_time, DATE('your_date')) >= 0 " +
                                                                             "ORDER BY projectName, testName;";
 
+        public static string SELECT_AMOUNT_OF_TESTS_ON_FIREFOX_AND_CHROME = "SELECT browser, COUNT(id) amountOfTests " +
+                                                                            "FROM test " +
+                                                                            "WHERE browser = 'firefox' " +
+                                                                            "UNION " +
+                                                                            "SELECT browser, COUNT(id) amountOfTests " +
+                                                                            "FROM test " + 
+                                                                            "WHERE browser = 'chrome'";
+
     }
 }
