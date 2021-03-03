@@ -1,0 +1,6 @@
+﻿{
+  "server" : "localhost",
+  "user" : "root",
+  "password" : "password",
+  "database" : "union_reporting"
+}
