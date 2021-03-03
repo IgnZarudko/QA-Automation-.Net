@@ -20,7 +20,7 @@ GROUP BY projectName;
 # Сортировать по проектам, и по тестам внутри проектов
 SELECT p.name projectName
      , test.name testName
-     , test.start_time dateFrom
+     , test.start_time startDate
 FROM test
 INNER JOIN project p on test.project_id = p.id
 WHERE DATEDIFF(test.end_time, DATE('2015-11-07')) >= 0

@@ -29,6 +29,29 @@ namespace DataBase.Tests.Database
 
             return testsList;
         }
+
+        public static List<ProjectAndTestsAmount> ParseAllProjectsWithTestsAmount(MySqlDataReader reader)
+        {
+            List<ProjectAndTestsAmount> projectsList = new List<ProjectAndTestsAmount>();
+            while (reader.Read())
+            {
+                projectsList.Add(new ProjectAndTestsAmount(reader[0].ToString(), int.Parse(reader[1].ToString()!)));
+            }
+
+            return projectsList;
+        }
+
+        public static List<TestWithProjectAndStartDate> ParseAllTestsWithProjectAndStartDate(MySqlDataReader reader)
+        {
+            List<TestWithProjectAndStartDate> tests = new List<TestWithProjectAndStartDate>();
+            while (reader.Read())
+            {
+                tests.Add(new TestWithProjectAndStartDate(reader[0].ToString(), reader[1].ToString(), reader[2].ToString()));
+            }
+
+            return tests;
+        }
+        
         private static TestWithProjectAndMinTime ParseTestWithProjectAndMinTime(MySqlDataReader reader)
         {
             string projectName = reader[0].ToString();

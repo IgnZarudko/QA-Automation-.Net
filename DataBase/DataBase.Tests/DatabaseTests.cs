@@ -51,6 +51,35 @@ namespace DataBase.Tests
             LogManager.GetLogger(nameof(MinimalTimeTest)).Info($"Got resulting JSON: {jsonResult}");
         }
 
+        [Test]
+        public void AllProjectsWithUniqueTestTest()
+        {
+            MySqlDataReader reader = _utils.ExecuteQuery(DatabaseQueries.SELECT_PROJECT_WITH_UNIQUE_TEST);
+            
+            List<ProjectAndTestsAmount> projectsList =
+                DatabaseParser.ParseAllProjectsWithTestsAmount(reader);
+            
+            string jsonResult = JsonConvert.SerializeObject(projectsList, Formatting.Indented);
+            
+            LogManager.GetLogger(nameof(MinimalTimeTest)).Info($"Got resulting JSON: {jsonResult}");
+        }
+
+        [TestCase("2015-11-07")]
+        public void AllTestsExecutedAfterDate(string date)
+        {
+            string sqlQuery =
+                DatabaseQueries.SELECT_TEST_WITH_PROJECT_EXECUTED_AFTER_DATE.Replace("your_date", date);
+            
+            MySqlDataReader reader = _utils.ExecuteQuery(sqlQuery);
+
+            List<TestWithProjectAndStartDate> testsList = DatabaseParser.ParseAllTestsWithProjectAndStartDate(reader);
+            
+            string jsonResult = JsonConvert.SerializeObject(testsList, Formatting.Indented);
+            
+            LogManager.GetLogger(nameof(MinimalTimeTest)).Info($"Got resulting JSON: {jsonResult}");
+
+        }
+
         [TearDown]
         public void TearDown()
         {
