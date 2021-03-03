@@ -60,7 +60,7 @@ namespace DataBase.Tests
             
             string jsonResult = JsonConvert.SerializeObject(testsList, Formatting.Indented);
             
-            LogManager.GetLogger(nameof(MinimalTimeTest)).Info(jsonResult);
+            LogManager.GetLogger(nameof(MinimalTimeTest)).Info($"Got resulting JSON: {jsonResult}");
         }
 
         [TearDown]
