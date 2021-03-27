@@ -1,0 +1,10 @@
+﻿[
+  {
+    "Genre" : "Action",
+    "DiscountType" : "Highest"
+  },
+  {
+    "Genre" : "Indie",
+    "DiscountType" : "Lowest"
+  }
+]

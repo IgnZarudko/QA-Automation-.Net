@@ -1,0 +1,10 @@
+﻿[
+  {
+    "Genre" : "Экшен",
+    "DiscountType" : "Highest"
+  },
+  {
+    "Genre" : "Инди",
+    "DiscountType" : "Lowest"
+  }
+]
