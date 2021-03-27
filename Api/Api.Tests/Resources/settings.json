@@ -1,0 +1,4 @@
+﻿{
+  "baseUrl": "https://jsonplaceholder.typicode.com",
+  "loggerConfigFile" : "log4net.config"
+}
