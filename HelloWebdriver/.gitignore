@@ -1,18 +1,14 @@
-# Common IntelliJ Platform excludes
-.idea/
+﻿# Common IntelliJ Platform excludes
+/.idea
 
 *.suo
 *.user
 .vs/
 [Bb]in/
 [Oo]bj/
-[Ll]og/
 _UpgradeReport_Files/
 [Pp]ackages/
 
 Thumbs.db
 Desktop.ini
 .DS_Store
-=======
-.idea/
-out/
